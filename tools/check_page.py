@@ -36,7 +36,12 @@ must('Leaflet 引入', 'unpkg.com/leaflet' in html)
 
 # 4. 模板残留检查（JS 渲染或占位符泄漏）
 for bad in ['{{', 'TODO', 'TBD', 'undefined']:
-    must(f'无模板残留 "{bad}"', bad not in html)
+    if bad == 'undefined':
+        # Task 5 离线降级代码中的合法 JS 判空（typeof L === 'undefined'）不计入残留
+        filtered = '\n'.join(l for l in html.splitlines() if "typeof L === 'undefined'" not in l)
+        must(f'无模板残留 "{bad}"', bad not in filtered)
+    else:
+        must(f'无模板残留 "{bad}"', bad not in html)
 
 # 5. 图片 URL 有效性（离线时跳过，仅警告）
 imgs = re.findall(r'src="(https://commons\.wikimedia\.org[^"]+)"', html)

@@ -94,6 +94,28 @@ li.tl .det span{color:var(--ink2);font-size:13px}
 .city-name{font-size:15px;font-weight:600;fill:#1d1d1f;text-anchor:middle}
 .city.sub .city-dot{fill:#ff9f0a}
 .route-note{margin-top:16px;font-size:13px;color:var(--ink2);text-align:center}
+/* Task 6 行程板块 Day 1-3 */
+.day-stack{display:flex;flex-direction:column;gap:40px;padding-top:40px}
+.day{background:var(--card);border:1px solid var(--line);border-radius:28px;padding:32px;box-shadow:var(--shadow);scroll-margin-top:80px}
+.day-head{display:flex;gap:20px;align-items:flex-start;margin-bottom:24px}
+.day-no{flex:0 0 auto;font-size:13px;font-weight:700;letter-spacing:.06em;color:#fff;background:var(--blue);border-radius:12px;padding:8px 12px}
+.day-date{font-size:13px;color:var(--ink2);font-weight:600}
+.day h3{font-size:clamp(20px,3vw,26px);font-weight:700;letter-spacing:-.015em;margin:4px 0 8px}
+.day-tags{margin-top:4px}
+.spot-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-bottom:20px}
+.meal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-bottom:20px}
+.spot{background:#fbfbfd;border:1px solid var(--line);border-radius:var(--radius-sm);overflow:hidden;transition:transform .3s, box-shadow .3s}
+.spot:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+.spot .s-body{padding:14px 16px 16px}
+.spot h4{font-size:16px;font-weight:650;letter-spacing:-.01em}
+.spot .s-tip{font-size:13px;color:var(--ink2);margin-top:6px}
+.spot .s-price{display:inline-block;margin-top:8px;font-size:12px;font-weight:600;color:var(--blue);background:#e8f0fe;border-radius:999px;padding:3px 10px}
+.meal{background:#fbfbfd;border:1px solid var(--line);border-radius:var(--radius-sm);padding:16px}
+.meal h4{font-size:15.5px;font-weight:650}
+.meal .m-meal{font-size:12.5px;color:var(--ink2);margin:4px 0}
+.meal .m-dish{font-size:13px;color:#3b3b40;margin-top:8px}
+.meal .m-price{display:inline-block;margin-top:8px;font-size:12px;font-weight:600;color:#d97706;background:#fef3c7;border-radius:999px;padding:3px 10px}
+@media(max-width:768px){.spot-grid,.meal-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -192,8 +214,295 @@ li.tl .det span{color:var(--ink2);font-size:13px}
     </div>
   </div>
 </section>
-  <!-- Task 3 填充七日行程卡 -->
-  <section id="itinerary"></section>
+  <!-- Task 6 填充行程板块 Day 1-3 -->
+  <section id="itinerary">
+    <div class="section-head">
+      <div class="kicker">Itinerary</div>
+      <h2>每日行程</h2>
+      <p>7 天 6 晚 · 每天 3 餐 + 核心景点 · 点击「展开时刻表」查看完整分时安排</p>
+    </div>
+    <div class="container day-stack">
+      <!-- Day 1 -->
+      <section class="day" id="day-1" data-day="1">
+        <header class="day-head">
+          <div class="day-no">Day 1</div>
+          <div class="day-meta">
+            <div class="day-date">9月30日 · 周三 · 抵达日</div>
+            <h3>巴黎初印象 — 铁塔 · 罗浮宫 · 凯旋门 · 蒙马特</h3>
+            <p class="day-tags"><span class="chip">🇫🇷 法国</span><span class="chip">市内约 20km</span><span class="chip">7 景点 + 3 餐</span></p>
+          </div>
+        </header>
+        <div class="spot-grid">
+          <article class="spot">
+            <div class="photo-wrap">
+              <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Eiffel%20Tower%20from%20Champ%20de%20Mars.jpg?width=1200" alt="埃菲尔铁塔" loading="lazy" onerror="this.setAttribute('data-failed','')">
+              <div class="photo-fallback">埃菲尔铁塔</div>
+            </div>
+            <div class="s-body">
+              <h4>埃菲尔铁塔</h4>
+              <p class="s-tip">清晨人最少，登二层 €18.80；战神广场免费，最佳拍照点在战神广场正对面与特罗卡德罗</p>
+              <span class="s-price">€18.80</span>
+            </div>
+          </article>
+          <article class="spot">
+            <div class="photo-wrap">
+              <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Louvre%20Museum%20Wikimedia%20Commons.jpg?width=1200" alt="罗浮宫" loading="lazy" onerror="this.setAttribute('data-failed','')">
+              <div class="photo-fallback">罗浮宫</div>
+            </div>
+            <div class="s-body">
+              <h4>罗浮宫</h4>
+              <p class="s-tip">精华路线：Carrousel 入口→蒙娜丽莎→维纳斯→胜利女神→拿破仑三世公寓；€17 官网提前预约时段</p>
+              <span class="s-price">€17</span>
+            </div>
+          </article>
+          <article class="spot">
+            <div class="photo-wrap">
+              <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Arc%20de%20Triomphe%20Paris.jpg?width=1200" alt="凯旋门" loading="lazy" onerror="this.setAttribute('data-failed','')">
+              <div class="photo-fallback">凯旋门</div>
+            </div>
+            <div class="s-body">
+              <h4>凯旋门</h4>
+              <p class="s-tip">登顶层 €13 俯瞰 12 条放射大道；外部拍照也极好</p>
+              <span class="s-price">€13</span>
+            </div>
+          </article>
+          <article class="spot">
+            <div class="photo-wrap">
+              <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Sacre-coeur-montmartre.jpg?width=1200" alt="蒙马特高地" loading="lazy" onerror="this.setAttribute('data-failed','')">
+              <div class="photo-fallback">蒙马特高地</div>
+            </div>
+            <div class="s-body">
+              <h4>蒙马特高地</h4>
+              <p class="s-tip">圣心大教堂免费，日落时分最美；小丘广场警惕旅游陷阱餐厅</p>
+              <span class="s-price">免费</span>
+            </div>
+          </article>
+        </div>
+        <div class="meal-grid">
+          <article class="meal">
+            <h4>早餐 · 附近 Boulangerie</h4>
+            <p class="m-meal">早餐</p>
+            <p class="m-dish">牛角包 €2.5 + 咖啡 €3；或酒店早餐 €15-25</p>
+            <span class="m-price">人均 €5.5</span>
+          </article>
+          <article class="meal">
+            <h4>午餐 · Le Foyot de Tuileries</h4>
+            <p class="m-meal">1890 经典法餐厅</p>
+            <p class="m-dish">焗蜗牛 €14.5 / 油封鸭腿 €22 / 洋葱汤 €11.5</p>
+            <span class="m-price">人均 €45-60 · 需预订</span>
+          </article>
+          <article class="meal">
+            <h4>晚餐 · Le Campanule</h4>
+            <p class="m-meal">经典法餐厅</p>
+            <p class="m-dish">牛排 €22 / 法式炖蛋 €16</p>
+            <span class="m-price">人均 €40-55 · 需预订</span>
+          </article>
+        </div>
+        <details class="tl-box">
+          <summary>展开完整时刻表（16 项）</summary>
+          <div class="tl-list">
+            <ul class="tl">
+              <li class="tl"><div class="t">06:00</div><div class="ty">航班</div><div class="det"><b>抵达巴黎戴高乐机场 CDG T2</b><span>准备好申根签证、入境文件、海关申报</span></div></li>
+              <li class="tl"><div class="t">06:00-07:00</div><div class="ty">交通</div><div class="det"><b>入境手续 + 提取行李</b><span>机场内步行 · 法国海关现金 €10000+ 需申报</span></div></li>
+              <li class="tl"><div class="t">07:00-08:00</div><div class="ty">租车</div><div class="det"><b>租车柜台取车（Hertz / Sixt / Europcar）</b><span>选中型 SUV + 全险，检查车身拍照 · 推荐标致 3008 / 宝马 X1</span></div></li>
+              <li class="tl"><div class="t">08:00-09:00</div><div class="ty">驾车</div><div class="det"><b>CDG → 巴黎市区酒店</b><span>28km / 36min · A1 高速 €4.5 → Périphérique 环线</span></div></li>
+              <li class="tl"><div class="t">09:00-09:30</div><div class="ty">住宿</div><div class="det"><b>办理入住、寄存行李</b><span>推荐 1区/4区（市中心）或 15区（性价比）· 停车 €30-50/晚</span></div></li>
+              <li class="tl"><div class="t">09:30-10:00</div><div class="ty">餐饮</div><div class="det"><b>简单早餐：牛角包 + 咖啡</b><span>或酒店早餐 €15-25</span></div></li>
+              <li class="tl"><div class="t">10:00-11:30</div><div class="ty">景点</div><div class="det"><b>埃菲尔铁塔 + 战神广场</b><span>距酒店约 4km/12min · 清晨人最少，登二层 €18.80，最佳拍照点战神广场正对面 / 特罗卡德罗</span></div></li>
+              <li class="tl"><div class="t">11:30-12:00</div><div class="ty">驾车</div><div class="det"><b>铁塔 → 罗浮宫</b><span>4km / 12min · 停车 Parking Quai Branly €3.10/h</span></div></li>
+              <li class="tl"><div class="t">12:00-13:30</div><div class="ty">餐饮</div><div class="det"><b>午餐 Le Foyot de Tuileries（1890 经典法餐厅）</b><span>焗蜗牛 €14.5 / 油封鸭腿 €22 / 洋葱汤 €11.5 · 人均 €45-60 · 需预订</span></div></li>
+              <li class="tl"><div class="t">13:30-15:30</div><div class="ty">景点</div><div class="det"><b>罗浮宫精华游览</b><span>€17 官网提前预约时段 · 路线：Carrousel 入口→蒙娜丽莎→维纳斯→胜利女神→拿破仑三世公寓</span></div></li>
+              <li class="tl"><div class="t">15:30-16:00</div><div class="ty">驾车</div><div class="det"><b>罗浮宫 → 凯旋门</b><span>4km / 10min · 停车 Parking La Bourdonnais €3.10/h</span></div></li>
+              <li class="tl"><div class="t">16:00-17:00</div><div class="ty">景点</div><div class="det"><b>凯旋门 + 星形广场</b><span>登顶层 €13 俯瞰 12 条放射大道</span></div></li>
+              <li class="tl"><div class="t">17:00-17:30</div><div class="ty">驾车</div><div class="det"><b>凯旋门 → 蒙马特</b><span>5km / 12min · 蒙马特为行人区，停 Parking Garibaldi €2.5/h 步行上山 15min</span></div></li>
+              <li class="tl"><div class="t">17:30-19:00</div><div class="ty">景点</div><div class="det"><b>圣心大教堂 + 蒙马特艺术广场 + 小丘广场</b><span>步行上山 15min · 免费，日落时分最美</span></div></li>
+              <li class="tl"><div class="t">19:30-21:00</div><div class="ty">餐饮</div><div class="det"><b>晚餐 Le Campanule 经典法餐厅</b><span>牛排 €22 / 法式炖蛋 €16 · 人均 €40-55 · 需预订</span></div></li>
+              <li class="tl"><div class="t">21:00-22:00</div><div class="ty">驾车</div><div class="det"><b>蒙马特 → 酒店</b><span>5-8km / 20-30min · 晚上市区交通较好</span></div></li>
+            </ul>
+          </div>
+        </details>
+      </section>
+      <!-- Day 2 -->
+      <section class="day" id="day-2" data-day="2">
+        <header class="day-head">
+          <div class="day-no">Day 2</div>
+          <div class="day-meta">
+            <div class="day-date">10月1日 · 周四 · 巴黎 → 布鲁塞尔</div>
+            <h3>巴黎深度游 → 布鲁塞尔 — 奥赛 · 圣母院 · 大广场 · 撒尿小童</h3>
+            <p class="day-tags"><span class="chip">🇫🇷 法国 → 🇧🇪 比利时</span><span class="chip">跨境 · 312km</span><span class="chip">4 景点 + 3 餐</span></p>
+          </div>
+        </header>
+        <div class="spot-grid">
+          <article class="spot">
+            <div class="photo-wrap">
+              <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Musee%20d%27Orsay%20and%20Pont%20Royal%2C%20North-West%20view%20140402%201.jpg?width=1200" alt="奥赛博物馆" loading="lazy" onerror="this.setAttribute('data-failed','')">
+              <div class="photo-fallback">奥赛博物馆</div>
+            </div>
+            <div class="s-body">
+              <h4>奥赛博物馆</h4>
+              <p class="s-tip">莫奈《干草堆》、梵高《自画像》</p>
+              <span class="s-price">€16</span>
+            </div>
+          </article>
+          <article class="spot">
+            <div class="photo-wrap">
+              <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/NotreDameDeParis.jpg?width=1200" alt="巴黎圣母院" loading="lazy" onerror="this.setAttribute('data-failed','')">
+              <div class="photo-fallback">西岱岛 · 巴黎圣母院</div>
+            </div>
+            <div class="s-body">
+              <h4>西岱岛 · 巴黎圣母院外观 + 圣礼拜堂</h4>
+              <p class="s-tip">圣母院 2024年12月重开，圣礼拜堂彩窗绝美</p>
+              <span class="s-price">€11</span>
+            </div>
+          </article>
+          <article class="spot">
+            <div class="photo-wrap">
+              <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Grand%20Place%2C%20Brussels.jpg?width=1200" alt="布鲁塞尔大广场" loading="lazy" onerror="this.setAttribute('data-failed','')">
+              <div class="photo-fallback">布鲁塞尔大广场</div>
+            </div>
+            <div class="s-body">
+              <h4>布鲁塞尔大广场</h4>
+              <p class="s-tip">UNESCO 世界遗产、欧洲最美广场，市政厅钟楼登顶</p>
+              <span class="s-price">€6</span>
+            </div>
+          </article>
+          <article class="spot">
+            <div class="photo-wrap">
+              <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Bruxelles%20Manneken%20Pis.jpg?width=1200" alt="撒尿小童" loading="lazy" onerror="this.setAttribute('data-failed','')">
+              <div class="photo-fallback">撒尿小童</div>
+            </div>
+            <div class="s-body">
+              <h4>撒尿小童 + 圣于贝尔拱廊街</h4>
+              <p class="s-tip">拱廊街买 Neuhaus 巧克力、Chimay 啤酒</p>
+              <span class="s-price">免费</span>
+            </div>
+          </article>
+        </div>
+        <div class="meal-grid">
+          <article class="meal">
+            <h4>午餐 · Maison Dandoy</h4>
+            <p class="m-meal">比利时薯条</p>
+            <p class="m-dish">薯条 €8</p>
+            <span class="m-price">人均 €14（两店合计）</span>
+          </article>
+          <article class="meal">
+            <h4>午餐 · Neuve Garage</h4>
+            <p class="m-meal">比利时华夫饼</p>
+            <p class="m-dish">华夫饼 €6</p>
+            <span class="m-price">人均 €14（两店合计）</span>
+          </article>
+          <article class="meal">
+            <h4>晚餐 · Maison Antoine</h4>
+            <p class="m-meal">1870 比利时餐厅</p>
+            <p class="m-dish">啤酒炖牛肉 €18 / 鸭胸 €24</p>
+            <span class="m-price">人均 €45-55 · 需预订 · Rue Antoine Dansaert 38</span>
+          </article>
+        </div>
+        <details class="tl-box">
+          <summary>展开完整时刻表（7 项）</summary>
+          <div class="tl-list">
+            <ul class="tl">
+              <li class="tl"><div class="t">08:30-10:00</div><div class="ty">景点</div><div class="det"><b>奥赛博物馆印象派艺术殿堂</b><span>距酒店约2km/7min · €16 官网提前预约 · 莫奈《干草堆》、梵高《自画像》· 停车 €3.5/h</span></div></li>
+              <li class="tl"><div class="t">10:30-11:30</div><div class="ty">景点</div><div class="det"><b>巴黎圣母院（外观）+ 圣礼拜堂</b><span>步行可达 · 圣母院 2024年12月重开 · 圣礼拜堂 €11 彩窗绝美</span></div></li>
+              <li class="tl"><div class="t">12:00-15:45</div><div class="ty">驾车</div><div class="det"><b>驾车前往布鲁塞尔</b><span>312km / 3h45min · A1→A2/E19 · 法国段 €10-12 · 13:30 在 Laon 服务区休息</span></div></li>
+              <li class="tl"><div class="t">16:30-17:30</div><div class="ty">餐饮</div><div class="det"><b>午餐：比利时薯条 + 华夫饼</b><span>步行可达 · Maison Dandoy 薯条 €8、Neuve Garage 华夫饼 €6</span></div></li>
+              <li class="tl"><div class="t">17:30-19:00</div><div class="ty">景点</div><div class="det"><b>布鲁塞尔大广场（Grand Place）+ 市政厅</b><span>步行3min · UNESCO 世界遗产，欧洲最美广场 · 市政厅钟楼 €6</span></div></li>
+              <li class="tl"><div class="t">19:00-19:30</div><div class="ty">景点</div><div class="det"><b>撒尿小童 + 圣于贝尔拱廊街</b><span>步行10min · 拱廊街买巧克力 Neuhaus 和啤酒 Chimay</span></div></li>
+              <li class="tl"><div class="t">21:30-23:00</div><div class="ty">餐饮</div><div class="det"><b>晚餐：Maison Antoine 比利时餐厅（1870年）</b><span>步行15min · 啤酒炖牛肉 €18、鸭胸 €24 · 人均 €45-55 · 需预订 · Rue Antoine Dansaert 38</span></div></li>
+            </ul>
+          </div>
+        </details>
+      </section>
+      <!-- Day 3 -->
+      <section class="day" id="day-3" data-day="3">
+        <header class="day-head">
+          <div class="day-no">Day 3</div>
+          <div class="day-meta">
+            <div class="day-date">10月2日 · 周五 · 布鲁塞尔 → 阿姆斯特丹</div>
+            <h3>布鲁塞尔 → 阿姆斯特丹 + 风车村 — 风车村 · 运河游船 · 水坝广场 · 九街</h3>
+            <p class="day-tags"><span class="chip">🇧🇪 比利时 → 🇳🇱 荷兰</span><span class="chip">跨境 · 242km</span><span class="chip">6 景点 + 3 餐</span></p>
+          </div>
+        </header>
+        <div class="spot-grid">
+          <article class="spot">
+            <div class="photo-wrap">
+              <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Zaanse%20Schans%20windmills.jpg?width=1200" alt="风车村 Zaanse Schans" loading="lazy" onerror="this.setAttribute('data-failed','')">
+              <div class="photo-fallback">风车村 Zaanse Schans</div>
+            </div>
+            <div class="s-body">
+              <h4>风车村 Zaanse Schans</h4>
+              <p class="s-tip">17 座历史风车；木鞋制作工坊免费、奶酪工坊 €8、登塔 €4；风车+运河+蓝屋经典画面</p>
+              <span class="s-price">免费入场</span>
+            </div>
+          </article>
+          <article class="spot">
+            <div class="photo-wrap">
+              <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Amsterdam%20Canals%20-%20July%202006.jpg?width=1200" alt="阿姆斯特丹运河带" loading="lazy" onerror="this.setAttribute('data-failed','')">
+              <div class="photo-fallback">阿姆斯特丹运河带</div>
+            </div>
+            <div class="s-body">
+              <h4>阿姆斯特丹运河带日落游船</h4>
+              <p class="s-tip">日落时分的运河 = 完美荷兰体验，码头 Centraal Station 附近</p>
+              <span class="s-price">€15 含中文导览</span>
+            </div>
+          </article>
+          <article class="spot">
+            <div class="photo-wrap">
+              <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Dam%20Amsterdam%207308.jpg?width=1200" alt="水坝广场 Dam Square" loading="lazy" onerror="this.setAttribute('data-failed','')">
+              <div class="photo-fallback">水坝广场 Dam Square</div>
+            </div>
+            <div class="s-body">
+              <h4>水坝广场 Dam Square</h4>
+              <p class="s-tip">王宫外观 + 国家纪念碑，傍晚灯光亮起后拍照效果好</p>
+              <span class="s-price">免费</span>
+            </div>
+          </article>
+          <article class="spot">
+            <div class="s-body">
+              <h4>九街 De Negen Straatjes 夜游</h4>
+              <p class="s-tip">最文艺街区：精品店、古董店、小酒馆，夜晚灯光下运河倒映</p>
+            </div>
+          </article>
+        </div>
+        <div class="meal-grid">
+          <article class="meal">
+            <h4>早餐 · 比利时特色</h4>
+            <p class="m-meal">早餐</p>
+            <p class="m-dish">华夫饼 + 巧克力 + 薯条</p>
+          </article>
+          <article class="meal">
+            <h4>午餐 · Albert Cuyp Market</h4>
+            <p class="m-meal">午餐</p>
+            <p class="m-dish">Stroopwafel €3 / 薯条 €5</p>
+          </article>
+          <article class="meal">
+            <h4>晚餐 · De Eendracht</h4>
+            <p class="m-meal">1919 最古老餐厅之一</p>
+            <p class="m-dish">荷兰炖牛肉 €18 / 鲱鱼三明治 €7 / 奶酪拼盘 €18</p>
+            <span class="m-price">人均 €35-50 · Egelantiersgracht 63 · 需预订</span>
+          </article>
+        </div>
+        <details class="tl-box">
+          <summary>展开完整时刻表（11 项）</summary>
+          <div class="tl-list">
+            <ul class="tl">
+              <li class="tl"><div class="t">07:30-08:30</div><div class="ty">餐饮</div><div class="det"><b>比利时特色早餐</b><span>华夫饼 + 巧克力 + 薯条 · 今天开车 212km 前往阿姆斯特丹</span></div></li>
+              <li class="tl"><div class="t">10:30-13:30</div><div class="ty">驾车</div><div class="det"><b>驾车前往阿姆斯特丹</b><span>212km / 2h45min · A1/E19→A2 经 Antwerp · 荷兰高速免费 · 经 Antwerp 可快速看 Cathedral €4</span></div></li>
+              <li class="tl"><div class="t">13:30-14:00</div><div class="ty">餐饮</div><div class="det"><b>快速午餐：Albert Cuyp Market 街头小吃</b><span>步行可达 · Stroopwafel 热华夫饼 €3、薯条 €5 · 市场位于 Dam 广场附近</span></div></li>
+              <li class="tl"><div class="t">14:00-14:30</div><div class="ty">住宿</div><div class="det"><b>办理入住/寄存行李</b><span>⚠阿姆斯特丹停车极贵 €5-7/h · 建议选带停车场酒店 €40-60/晚</span></div></li>
+              <li class="tl"><div class="t">14:30-15:00</div><div class="ty">驾车</div><div class="det"><b>前往 Zaanse Schans 风车村</b><span>15km / 20min · N508/A7 北向 · 免费停车场 P1/P2</span></div></li>
+              <li class="tl"><div class="t">15:00-17:30</div><div class="ty">景点</div><div class="det"><b>Zaanse Schans 荷兰风车村深度游览</b><span>免费入场 · 17 座历史风车（磨坊 €4-5/座）· 木鞋制作工坊免费 · 奶酪工坊（Edam cheese €8）· 木鞋行走体验 €7 · 金萨德风车（De Gouwe）€4 登塔俯瞰 · 拍照绝佳：风车+运河+蓝屋经典荷兰画面</span></div></li>
+              <li class="tl"><div class="t">17:30-18:00</div><div class="ty">驾车</div><div class="det"><b>驾车返回阿姆斯特丹市区</b><span>15km / 20min · 沿原路返回 · 17:30 出发可赶上日落时分的运河</span></div></li>
+              <li class="tl"><div class="t">18:00-19:00</div><div class="ty">景点</div><div class="det"><b>阿姆斯特丹运河带日落游船</b><span>步行5min · €15（含中文导览）· 日落时分的运河 + 风车村记忆 = 完美荷兰体验 · 码头：Centraal Station 附近</span></div></li>
+              <li class="tl"><div class="t">19:00-19:30</div><div class="ty">景点</div><div class="det"><b>Dam Square 水坝广场 + 王宫外观</b><span>步行3min · 免费 · 荷兰王宫（原市政厅）+ 国家纪念碑 · 广场傍晚灯光亮起后拍照效果好</span></div></li>
+              <li class="tl"><div class="t">19:30-21:00</div><div class="ty">餐饮</div><div class="det"><b>晚餐：De Eendracht（1919 年最古老餐厅之一）</b><span>骑车10min · 荷兰炖牛肉 €18、鲱鱼三明治 €7、奶酪拼盘 €18 · 人均 €35-50 · 地址：Egelantiersgracht 63 · 需预订</span></div></li>
+              <li class="tl"><div class="t">21:00-22:30</div><div class="ty">景点</div><div class="det"><b>De Negen Straatjes（九街）精品区夜游</b><span>步行10min · 阿姆斯特丹最文艺的街区：精品店、古董店、小酒馆 · 夜晚灯光下的运河倒映很美</span></div></li>
+            </ul>
+          </div>
+        </details>
+      </section>
+    </div>
+  </section>
   <!-- Task 4 填充风情板块 -->
   <section id="culture"></section>
   <!-- Task 4 填充预算板块 -->
