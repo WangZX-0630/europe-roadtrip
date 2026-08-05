@@ -116,6 +116,16 @@ li.tl .det span{color:var(--ink2);font-size:13px}
 .meal .m-dish{font-size:13px;color:#3b3b40;margin-top:8px}
 .meal .m-price{display:inline-block;margin-top:8px;font-size:12px;font-weight:600;color:#d97706;background:#fef3c7;border-radius:999px;padding:3px 10px}
 @media(max-width:768px){.spot-grid,.meal-grid{grid-template-columns:1fr}}
+/* Task 8 国家风情板块 */
+.country-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;padding-top:40px}
+.country{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:26px;box-shadow:var(--shadow);border-top:4px solid var(--acc,#0071e3);transition:transform .35s, box-shadow .35s}
+.country:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+.c-flag{font-size:34px;line-height:1}
+.country h3{font-size:19px;font-weight:700;margin:12px 0 8px;letter-spacing:-.01em}
+.c-desc{font-size:14px;color:var(--ink2);margin-bottom:14px}
+.c-list{display:flex;flex-direction:column;gap:6px}
+.c-list span{font-size:13px;color:#3b3b40;background:#f5f5f7;border-radius:10px;padding:7px 12px}
+@media(max-width:768px){.country-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -837,8 +847,45 @@ li.tl .det span{color:var(--ink2);font-size:13px}
       </section>
     </div>
   </section>
-  <!-- Task 4 填充风情板块 -->
-  <section id="culture"></section>
+  <section id="culture">
+    <div class="section-head">
+      <div class="kicker">Local Flavor</div>
+      <h2>国家风情</h2>
+      <p>五国四味——把路上的风土人情装进心里</p>
+    </div>
+    <div class="container country-grid">
+      <article class="country" style="--acc:#0a84ff">
+        <div class="c-flag">🇫🇷</div>
+        <h3>法国 · 艺术与咖啡</h3>
+        <p class="c-desc">露天咖啡座是法国人的客厅——花神咖啡馆里萨特写下存在主义，清晨的牛角包配浓缩咖啡是每天的仪式。</p>
+        <div class="c-list"><span>🍽 焗蜗牛 · 油封鸭腿 · 可丽饼 · 马卡龙</span><span>📍 铁塔晨光 · 塞纳河游船 · 蒙马特日落</span></div>
+      </article>
+      <article class="country" style="--acc:#ff3b30">
+        <div class="c-flag">🇧🇪</div>
+        <h3>比利时 · 巧克力与漫画</h3>
+        <p class="c-desc">布鲁塞尔大广场被誉为欧洲最美客厅，撒尿小童的传说流传四百年——薯条与华夫饼在这里才是正统。</p>
+        <div class="c-list"><span>🍽 比利时薯条 · 华夫饼 · Neuhaus 巧克力</span><span>📍 大广场夜景 · 圣于贝尔拱廊街</span></div>
+      </article>
+      <article class="country" style="--acc:#ff9f0a">
+        <div class="c-flag">🇳🇱</div>
+        <h3>荷兰 · 风车与自行车</h3>
+        <p class="c-desc">比海平面低 7 米的国度里，风车与运河是千年智慧的雕塑——骑行和游船，是打开阿姆斯特丹的正确方式。</p>
+        <div class="c-list"><span>🍽 Stroopwafel · 奶酪 · 鲱鱼三明治</span><span>📍 风车村 · 运河日落游船 · 九街夜游</span></div>
+      </article>
+      <article class="country" style="--acc:#bf5af2">
+        <div class="c-flag">🇩🇪</div>
+        <h3>德国 · 哥特与啤酒</h3>
+        <p class="c-desc">科隆大教堂建了 632 年——哥特式巅峰之下，一小杯 Kölsch 配一根香肠，就是科隆人的下午茶。</p>
+        <div class="c-list"><span>🍽 科隆香肠 · Kölsch 啤酒 · 土豆饼</span><span>📍 大教堂登塔 · 爱情锁桥 · 莱茵河畔</span></div>
+      </article>
+      <article class="country" style="--acc:#64d2ff">
+        <div class="c-flag">🇱🇺</div>
+        <h3>卢森堡 · 袖珍公国</h3>
+        <p class="c-desc">欧盟最小的首都之一，却有欧洲最深的峡谷——站在 Calvarieberg 俯瞰老城，仿佛中世纪画卷铺展脚下。</p>
+        <div class="c-list"><span>🍽 烟熏猪肉配蚕豆</span><span>📍 Bock 地道 · Grund 峡谷 · 老城全景</span></div>
+      </article>
+    </div>
+  </section>
   <!-- Task 4 填充预算板块 -->
   <section id="budget"></section>
   <!-- Task 4 填充预订板块 -->
