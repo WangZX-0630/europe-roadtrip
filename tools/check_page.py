@@ -48,7 +48,7 @@ imgs = re.findall(r'src="(https://commons\.wikimedia\.org[^"]+)"', html)
 if imgs:
     for url in imgs:
         try:
-            req = urllib.request.Request(url, method='HEAD')
+            req = urllib.request.Request(url, method='HEAD', headers={'User-Agent': 'Mozilla/5.0 (compatible; EuropeTourPlan-check/1.0)'})
             code = urllib.request.urlopen(req, timeout=8).status
             must(f'图片可达 ({code}) {url.split("/")[-1][:40]}', code == 200)
         except Exception as e:
