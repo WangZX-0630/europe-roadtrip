@@ -126,6 +126,42 @@ li.tl .det span{color:var(--ink2);font-size:13px}
 .c-list{display:flex;flex-direction:column;gap:6px}
 .c-list span{font-size:13px;color:#3b3b40;background:#f5f5f7;border-radius:10px;padding:7px 12px}
 @media(max-width:768px){.country-grid{grid-template-columns:1fr}}
+/* Task 9 驾驶数据表 */
+.drive-table{width:100%;border-collapse:collapse;font-size:14px}
+.drive-table th{font-size:12px;color:var(--ink2);font-weight:600;text-align:left;padding:10px 12px;border-bottom:1px solid var(--line)}
+.drive-table td{padding:11px 12px;border-bottom:1px solid var(--line);color:#3b3b40;font-variant-numeric:tabular-nums}
+.drive-table tbody tr:hover td{background:#fbfbfd}
+.drive-table tfoot td{font-weight:700;color:var(--ink);background:#f5f5f7}
+@media(max-width:640px){.drive-table{font-size:12.5px}.drive-table td,.drive-table th{padding:8px 8px}}
+/* Task 9 预算 */
+.budget-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;padding-top:40px}
+.budget-item{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:var(--shadow)}
+.b-name{font-size:14px;font-weight:600;color:var(--ink2)}
+.b-amt{font-size:24px;font-weight:700;letter-spacing:-.02em;margin:8px 0 6px;font-variant-numeric:tabular-nums}
+.b-amt small{font-size:12.5px;color:var(--ink2);font-weight:500;margin-left:4px}
+.b-note{font-size:12.5px;color:var(--ink2)}
+.budget-item.total{border:2px solid var(--blue);background:linear-gradient(160deg,#e8f0fe,#fff)}
+.budget-item.total .b-amt{color:var(--blue)}
+@media(max-width:768px){.budget-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.budget-grid{grid-template-columns:1fr}}
+/* Task 9 预订 */
+.booking-list{display:flex;flex-direction:column;gap:10px;padding-top:40px}
+.booking{display:flex;gap:16px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 20px;box-shadow:var(--shadow)}
+.b-n{flex:0 0 auto;width:36px;height:36px;border-radius:50%;background:var(--blue);color:#fff;font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center}
+.booking b{font-size:15.5px}
+.booking p{font-size:13px;color:var(--ink2);margin-top:2px}
+/* Task 9 贴士 */
+.tips-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px;padding-top:40px}
+.tip-card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:var(--shadow)}
+.t-icon{font-size:26px}
+.tip-card b{display:block;font-size:15.5px;margin:10px 0 6px}
+.tip-card p{font-size:13px;color:var(--ink2)}
+/* Task 9 页脚 */
+footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
+.return-card{background:#0d0d12;color:#fff;border-radius:28px;padding:36px;text-align:center;margin-bottom:32px}
+.r-title{font-size:clamp(19px,3vw,26px);font-weight:700;letter-spacing:-.015em}
+.return-card p{margin-top:10px;color:#d2d2d7;font-size:15px}
+.foot-note{text-align:center;font-size:13px;color:var(--ink2)}
 </style>
 </head>
 <body>
@@ -208,6 +244,26 @@ li.tl .det span{color:var(--ink2);font-size:13px}
         <a href="#day-5" data-city="凡尔赛" class="city" transform="translate(325.8,411.4)"><circle r="7" class="city-dot"/><text class="city-name" y="26">凡尔赛</text></a>
       </svg>
       <p class="route-note">▲ 数字为各段自驾里程 · 风车村为阿姆斯特丹当日往返支线 · 全程 1,502km</p>
+    </div>
+  </div>
+  <!-- Task 9 驾驶数据表 -->
+  <div class="container">
+    <div class="card" style="margin-top:20px">
+      <table class="drive-table">
+        <thead><tr><th>路段</th><th>距离</th><th>时间</th><th>高速 / 费用</th><th>途经</th></tr></thead>
+        <tbody>
+          <tr class="drive"><td>巴黎 CDG → 巴黎市区</td><td>28km</td><td>36min</td><td>A1 €4.5</td><td>—</td></tr>
+          <tr class="drive"><td>巴黎 → 布鲁塞尔</td><td>312km</td><td>3h45min</td><td>A1→A2/E19 · 法国段 €10-12</td><td>Compiègne · Laon</td></tr>
+          <tr class="drive"><td>布鲁塞尔 → 阿姆斯特丹</td><td>212km</td><td>2h45min</td><td>A1/E19→A2 · 荷兰免费</td><td>Antwerp</td></tr>
+          <tr class="drive"><td>阿姆斯特丹市区 → 风车村</td><td>15km</td><td>20min</td><td>N508/A7 · 免费</td><td>单程</td></tr>
+          <tr class="drive"><td>阿姆斯特丹 → 科隆</td><td>261km</td><td>3h15min</td><td>A2 · 德国免费</td><td>Utrecht · Düsseldorf</td></tr>
+          <tr class="drive"><td>科隆 → 卢森堡市</td><td>203km</td><td>2h30min</td><td>A1/E41 · 免费</td><td>Trier</td></tr>
+          <tr class="drive"><td>卢森堡市 → 凡尔赛</td><td>381km</td><td>4h30min</td><td>A31→A4 · 法国段 €15-18</td><td>Metz · Reims（最长！）</td></tr>
+          <tr class="drive"><td>凡尔赛 → 巴黎市区</td><td>23km</td><td>36min</td><td>N104/A13 · €4-5</td><td>—</td></tr>
+          <tr class="drive"><td>巴黎市区 → CDG</td><td>27km</td><td>36min</td><td>A1 · €4.5</td><td>预留 1.5h 防堵车</td></tr>
+        </tbody>
+        <tfoot><tr><td>合计</td><td>1,502km</td><td>约 22 小时</td><td>高速费 €40-50</td><td>较 V2 增加 36km（风车村往返）</td></tr></tfoot>
+      </table>
     </div>
   </div>
 </section>
@@ -886,15 +942,64 @@ li.tl .det span{color:var(--ink2);font-size:13px}
       </article>
     </div>
   </section>
-  <!-- Task 4 填充预算板块 -->
-  <section id="budget"></section>
-  <!-- Task 4 填充预订板块 -->
-  <section id="bookings"></section>
-  <!-- Task 4 填充贴士板块 -->
-  <section id="tips"></section>
+  <section id="budget">
+    <div class="section-head">
+      <div class="kicker">Budget</div>
+      <h2>预算参考</h2>
+      <p>人均 €1,540–2,300（约 ¥12,000–18,500，不含国际机票）</p>
+    </div>
+    <div class="container budget-grid">
+      <article class="budget-item"><div class="b-name">租车 · 7 天 SUV</div><div class="b-amt">€200–300<small>/人</small></div><div class="b-note">全险（CDW + THEP）· 推荐标致 3008 / 宝马 X1</div></article>
+      <article class="budget-item"><div class="b-name">燃油 · 1,502km</div><div class="b-amt">€100–130<small>/人</small></div><div class="b-note">按 8L/100km × €1.8/L 估算</div></article>
+      <article class="budget-item"><div class="b-name">过路费</div><div class="b-amt">€20–25<small>/人</small></div><div class="b-note">仅法国段收费，荷/德高速免费</div></article>
+      <article class="budget-item"><div class="b-name">停车 · 6 天</div><div class="b-amt">€50–75<small>/人</small></div><div class="b-note">市区 €2.5–5/h · 风车村 P1/P2 免费</div></article>
+      <article class="budget-item"><div class="b-name">酒店 · 6 晚四星</div><div class="b-amt">€600–900<small>/人</small></div><div class="b-note">€200–300/晚 · 阿姆斯特丹选带停车场</div></article>
+      <article class="budget-item"><div class="b-name">餐饮 · 7 天</div><div class="b-amt">€400–550<small>/人</small></div><div class="b-note">法餐 + 当地小吃，含 2 顿米其林体验</div></article>
+      <article class="budget-item"><div class="b-name">景点门票</div><div class="b-amt">€170–220<small>/人</small></div><div class="b-note">含罗浮宫、凡尔赛、博物馆等全部预约票</div></article>
+      <article class="budget-item total"><div class="b-name">每人总计（不含机票）</div><div class="b-amt">€1,540–2,300<small>≈ ¥12,000–18,500</small></div><div class="b-note">7 天 6 晚 · 五国 · 含全部住宿与餐食</div></article>
+    </div>
+  </section>
+  <section id="bookings">
+    <div class="section-head">
+      <div class="kicker">Bookings</div>
+      <h2>出发前 · 必预订清单</h2>
+      <p>热门景点必须提前预约时段，7 项缺一不可</p>
+    </div>
+    <div class="container booking-list">
+      <div class="booking"><span class="b-n">01</span><div><b>租车</b><p>提前 1 个月 · Hertz / Sixt · 中型 SUV + 全险</p></div></div>
+      <div class="booking"><span class="b-n">02</span><div><b>梵高博物馆</b><p>提前 2-3 个月官网 · €20</p></div></div>
+      <div class="booking"><span class="b-n">03</span><div><b>安妮之家</b><p>提前 2-3 个月官网 · €16</p></div></div>
+      <div class="booking"><span class="b-n">04</span><div><b>罗浮宫</b><p>提前 2-4 周官网预约时段 · €17</p></div></div>
+      <div class="booking"><span class="b-n">05</span><div><b>凡尔赛宫</b><p>提前 2-4 周官网 · €20</p></div></div>
+      <div class="booking"><span class="b-n">06</span><div><b>Rijksmuseum</b><p>提前 1-2 周官网 · €20 · ⭐ 新增</p></div></div>
+      <div class="booking"><span class="b-n">07</span><div><b>热门餐厅</b><p>Le Foyot / Les Ombres / Maison Antoine 提前 1-2 周</p></div></div>
+    </div>
+  </section>
+  <section id="tips">
+    <div class="section-head">
+      <div class="kicker">Practical Tips</div>
+      <h2>实用贴士</h2>
+    </div>
+    <div class="container tips-grid">
+      <div class="tip-card"><span class="t-icon">🛂</span><b>签证</b><p>护照有效期 6 个月以上 + 申根签证</p></div>
+      <div class="tip-card"><span class="t-icon">🚗</span><b>限速</b><p>法国高速 130（雨 110）· 荷兰 100/130 · 德国不限速（建议 120-130）</p></div>
+      <div class="tip-card"><span class="t-icon">🅿️</span><b>停车</b><p>市区 €2.5-7/h · P+R €5-10/天含公交 · 风车村 P1/P2 免费</p></div>
+      <div class="tip-card"><span class="t-icon">⛽</span><b>加油</b><p>每到一个城市先加满再上高速</p></div>
+      <div class="tip-card"><span class="t-icon">🌦</span><b>天气</b><p>10 月 12-18°C · 带外套 + 雨伞 + 舒适步行鞋</p></div>
+      <div class="tip-card"><span class="t-icon">💶</span><b>货币</b><p>五国全部使用欧元 € · 备少量现金（海关申报线 €10,000）</p></div>
+      <div class="tip-card"><span class="t-icon">📱</span><b>手机</b><p>欧洲漫游或 eSIM（Airalo / Holafly）</p></div>
+      <div class="tip-card"><span class="t-icon">🛡</span><b>保险</b><p>欧洲旅行医疗保险 + 租车全险（CDW + THEP）</p></div>
+    </div>
+  </section>
 </main>
 <footer>
-  <p>返程信息：10/6 22:00 CDG→北京 ✈️，时差 -7h，预计 10/7 中午抵达</p>
+  <div class="container">
+    <div class="return-card">
+      <div class="r-title">✈️ 10 月 6 日 22:00 · 巴黎 CDG → 北京</div>
+      <p>飞行约 11 小时 · 时差 -7h · 预计 10 月 7 日北京时间 11:00-12:00 抵达首都机场</p>
+    </div>
+    <p class="foot-note">欧洲自驾 · 七日五国 · 2026.9.30 — 10.6 · 全程 1,502km · 用脚步和车轮丈量欧洲</p>
+  </div>
 </footer>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
