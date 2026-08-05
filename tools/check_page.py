@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """校验 index.html 结构完整性与数据完整性。用法: python tools/check_page.py"""
-import re, sys, urllib.request
+import re, sys, time, urllib.request
+# Windows GBK 控制台兼容：统一 UTF-8 输出
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+    sys.stderr.reconfigure(encoding='utf-8', errors='replace')
 
 html = open('index.html', encoding='utf-8').read()
 errors = []
@@ -22,12 +26,12 @@ for m in re.finditer(r'href="#([\w-]+)"', html):
         must(f'导航锚点 #{aid} 有目标', f'id="{aid}"' in html)
 
 # 3. 行程数据完整性
-must('7 个行程板块', len(re.findall(r'class="day" data-day="\d"', html)) == 7)
+must('7 个行程板块', len(re.findall(r'class="day( reveal)?" data-day="\d"', html)) == 7)
 tl = re.findall(r'<li class="tl">', html)
 must(f'69 条时刻表记录 (实际 {len(tl)})', len(tl) == 69)
-spots = re.findall(r'<article class="spot">', html)
+spots = re.findall(r'<article class="spot( reveal)?"', html)
 must(f'景点卡数量 ({len(spots)} 张)', len(spots) >= 28)
-meals = re.findall(r'<article class="meal">', html)
+meals = re.findall(r'<article class="meal( reveal)?"', html)
 must(f'美食卡数量 ({len(meals)} 张)', len(meals) >= 13)
 drives = re.findall(r'<tr class="drive">', html)
 must(f'9 段驾驶数据 (实际 {len(drives)})', len(drives) == 9)
@@ -44,15 +48,24 @@ for bad in ['{{', 'TODO', 'TBD', 'undefined']:
         must(f'无模板残留 "{bad}"', bad not in html)
 
 # 5. 图片 URL 有效性（离线时跳过，仅警告）
+# Wikimedia Special:FilePath 对高频请求有限流（429/HTTPError），加退避重试与请求间隔
 imgs = re.findall(r'src="(https://commons\.wikimedia\.org[^"]+)"', html)
 if imgs:
     for url in imgs:
-        try:
-            req = urllib.request.Request(url, method='HEAD', headers={'User-Agent': 'Mozilla/5.0 (compatible; EuropeTourPlan-check/1.0)'})
-            code = urllib.request.urlopen(req, timeout=8).status
-            must(f'图片可达 ({code}) {url.split("/")[-1][:40]}', code == 200)
-        except Exception as e:
-            must(f'图片检查跳过/失败 {url.split("/")[-1][:40]} ({type(e).__name__})', False)
+        ok = False
+        for attempt in range(3):
+            try:
+                req = urllib.request.Request(url, method='HEAD', headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) EuropeTourPlan-check/1.1'})
+                code = urllib.request.urlopen(req, timeout=8).status
+                ok = code == 200
+                must(f'图片可达 ({code}) {url.split("/")[-1][:40]}', ok)
+                break
+            except Exception as e:
+                if attempt < 2:
+                    time.sleep(3 * (attempt + 1))
+                    continue
+                must(f'图片检查跳过/失败 {url.split("/")[-1][:40]} ({type(e).__name__})', False)
+        time.sleep(0.6)
 
 print()
 if errors:

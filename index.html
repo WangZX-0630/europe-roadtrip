@@ -19,6 +19,7 @@ a{color:var(--blue);text-decoration:none}
 .container{max-width:1100px;margin:0 auto;padding:0 24px}
 /* 毛玻璃导航 */
 #topnav{position:sticky;top:0;z-index:100;background:rgba(245,245,247,.8);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid var(--line)}
+#topnav.scrolled{box-shadow:0 1px 12px rgba(0,0,0,.08)}
 .nav-inner{max-width:1100px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;justify-content:space-between}
 .brand{font-size:17px;font-weight:600;letter-spacing:-.01em;color:var(--ink)}
 .nav-links{display:flex;gap:28px}
@@ -61,8 +62,8 @@ li.tl .ty{font-size:12px;color:var(--blue);font-weight:600;padding-top:2px}
 li.tl .det b{display:block;font-size:14.5px;margin-bottom:2px}
 li.tl .det span{color:var(--ink2);font-size:13px}
 /* Hero */
-#hero{position:relative;min-height:92vh;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;background:#0d0d12}
-#hero .hero-bg{position:absolute;inset:0;background-size:cover;background-position:center;opacity:.62}
+#hero{position:relative;min-height:92vh;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;background:linear-gradient(160deg,#0d0d12 0%,#17171f 55%,#23232e 100%)}
+#hero .hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;opacity:.62}
 #hero .hero-bg[data-failed]{display:none}
 #hero .hero-bg[data-failed]~.hero-inner{color:#fff}
 .hero-inner{position:relative;z-index:2;padding:0 24px}
@@ -132,7 +133,7 @@ li.tl .det span{color:var(--ink2);font-size:13px}
 .drive-table td{padding:11px 12px;border-bottom:1px solid var(--line);color:#3b3b40;font-variant-numeric:tabular-nums}
 .drive-table tbody tr:hover td{background:#fbfbfd}
 .drive-table tfoot td{font-weight:700;color:var(--ink);background:#f5f5f7}
-@media(max-width:640px){.drive-table{font-size:12.5px}.drive-table td,.drive-table th{padding:8px 8px}}
+@media(max-width:640px){.drive-table{font-size:12.5px;width:100%;table-layout:fixed}.drive-table td,.drive-table th{padding:8px 8px;word-break:break-word}.drive-table th:nth-child(5),.drive-table td:nth-child(5){display:none}}
 /* Task 9 预算 */
 .budget-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;padding-top:40px}
 .budget-item{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:var(--shadow)}
@@ -181,7 +182,7 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
 <main>
   <!-- Task 3 填充 hero 首屏 -->
   <section id="hero">
-    <div class="hero-bg" style="background-image:url('https://commons.wikimedia.org/wiki/Special:FilePath/Eiffel%20Tower%20from%20Champ%20de%20Mars.jpg?width=1600')" onerror="this.setAttribute('data-failed','')"></div>
+    <img class="hero-bg" src="https://commons.wikimedia.org/wiki/Special:FilePath/Eiffel%20Tower%20from%20Champ%20de%20Mars.jpg?width=1600" alt="" onerror="this.setAttribute('data-failed','')">
     <div class="hero-inner">
       <div class="kicker">Sept 30 — Oct 6 · 2026</div>
       <h1>欧洲自驾 · 七日五国</h1>
@@ -201,7 +202,7 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
   </section>
   <!-- Task 3 填充 SVG 路线图 -->
   <section id="route">
-  <div class="section-head">
+  <div class="section-head reveal">
     <div class="kicker">The Route</div>
     <h2>整体路线</h2>
     <p>一次穿越五国的环形自驾——巴黎出发，逆时针驶过比利时、荷兰、德国与卢森堡，最后回到巴黎。</p>
@@ -229,11 +230,11 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
         <!-- 距离标注 -->
         <text class="dist" x="420" y="300">312km</text>
         <text class="dist" x="600" y="160">212km</text>
-        <text class="dist" x="560" y="96">15km</text>
+        <text class="dist" x="560" y="68">15km</text>
         <text class="dist" x="690" y="175">261km</text>
         <text class="dist" x="740" y="305">203km</text>
         <text class="dist" x="480" y="420">381km</text>
-        <text class="dist" x="318" y="430">23km</text>
+        <text class="dist" x="318" y="465">23km</text>
         <!-- 城市节点 -->
         <a href="#day-1" data-city="巴黎" class="city" transform="translate(346.7,407.1)"><circle r="9" class="city-dot"/><text class="city-name" y="-16">巴黎</text></a>
         <a href="#day-2" data-city="布鲁塞尔" class="city" transform="translate(526.7,242.9)"><circle r="9" class="city-dot"/><text class="city-name" y="-16">布鲁塞尔</text></a>
@@ -269,7 +270,7 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
 </section>
   <!-- Task 5 填充 Leaflet 地图 -->
   <section id="map">
-  <div class="section-head">
+  <div class="section-head reveal">
     <div class="kicker">Interactive Map</div>
     <h2>交互地图</h2>
     <p>点击城市标记，直达对应行程日。</p>
@@ -282,14 +283,14 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
 </section>
   <!-- Task 6 填充行程板块 Day 1-3 -->
   <section id="itinerary">
-    <div class="section-head">
+    <div class="section-head reveal">
       <div class="kicker">Itinerary</div>
       <h2>每日行程</h2>
       <p>7 天 6 晚 · 每天 3 餐 + 核心景点 · 点击「展开时刻表」查看完整分时安排</p>
     </div>
     <div class="container day-stack">
       <!-- Day 1 -->
-      <section class="day" data-day="1" id="day-1">
+      <section class="day reveal" data-day="1" id="day-1">
         <header class="day-head">
           <div class="day-no">Day 1</div>
           <div class="day-meta">
@@ -299,7 +300,7 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
           </div>
         </header>
         <div class="spot-grid">
-          <article class="spot">
+          <article class="spot reveal">
             <div class="photo-wrap">
               <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Eiffel%20Tower%20from%20Champ%20de%20Mars.jpg?width=1200" alt="埃菲尔铁塔" loading="lazy" onerror="this.setAttribute('data-failed','')">
               <div class="photo-fallback">埃菲尔铁塔</div>
@@ -310,7 +311,7 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
               <span class="s-price">€18.80</span>
             </div>
           </article>
-          <article class="spot">
+          <article class="spot reveal">
             <div class="photo-wrap">
               <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Louvre%20Museum%20Wikimedia%20Commons.jpg?width=1200" alt="罗浮宫" loading="lazy" onerror="this.setAttribute('data-failed','')">
               <div class="photo-fallback">罗浮宫</div>
@@ -321,7 +322,7 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
               <span class="s-price">€17</span>
             </div>
           </article>
-          <article class="spot">
+          <article class="spot reveal">
             <div class="photo-wrap">
               <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Arc%20de%20Triomphe%20Paris.jpg?width=1200" alt="凯旋门" loading="lazy" onerror="this.setAttribute('data-failed','')">
               <div class="photo-fallback">凯旋门</div>
@@ -332,7 +333,7 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
               <span class="s-price">€13</span>
             </div>
           </article>
-          <article class="spot">
+          <article class="spot reveal">
             <div class="photo-wrap">
               <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Sacre-coeur-montmartre.jpg?width=1200" alt="蒙马特高地" loading="lazy" onerror="this.setAttribute('data-failed','')">
               <div class="photo-fallback">蒙马特高地</div>
@@ -345,19 +346,19 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
           </article>
         </div>
         <div class="meal-grid">
-          <article class="meal">
+          <article class="meal reveal">
             <h4>早餐 · 附近 Boulangerie</h4>
             <p class="m-meal">早餐</p>
             <p class="m-dish">牛角包 €2.5 + 咖啡 €3；或酒店早餐 €15-25</p>
             <span class="m-price">人均 €5.5</span>
           </article>
-          <article class="meal">
+          <article class="meal reveal">
             <h4>午餐 · Le Foyot de Tuileries</h4>
             <p class="m-meal">1890 经典法餐厅</p>
             <p class="m-dish">焗蜗牛 €14.5 / 油封鸭腿 €22 / 洋葱汤 €11.5</p>
             <span class="m-price">人均 €45-60 · 需预订</span>
           </article>
-          <article class="meal">
+          <article class="meal reveal">
             <h4>晚餐 · Le Campanule</h4>
             <p class="m-meal">经典法餐厅</p>
             <p class="m-dish">牛排 €22 / 法式炖蛋 €16</p>
@@ -389,7 +390,7 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
         </details>
       </section>
       <!-- Day 2 -->
-      <section class="day" data-day="2" id="day-2">
+      <section class="day reveal" data-day="2" id="day-2">
         <header class="day-head">
           <div class="day-no">Day 2</div>
           <div class="day-meta">
@@ -399,7 +400,7 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
           </div>
         </header>
         <div class="spot-grid">
-          <article class="spot">
+          <article class="spot reveal">
             <div class="photo-wrap">
               <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Musee%20d%27Orsay%20and%20Pont%20Royal%2C%20North-West%20view%20140402%201.jpg?width=1200" alt="奥赛博物馆" loading="lazy" onerror="this.setAttribute('data-failed','')">
               <div class="photo-fallback">奥赛博物馆</div>
@@ -410,7 +411,7 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
               <span class="s-price">€16</span>
             </div>
           </article>
-          <article class="spot">
+          <article class="spot reveal">
             <div class="photo-wrap">
               <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/NotreDameDeParis.jpg?width=1200" alt="巴黎圣母院" loading="lazy" onerror="this.setAttribute('data-failed','')">
               <div class="photo-fallback">西岱岛 · 巴黎圣母院</div>
@@ -421,7 +422,7 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
               <span class="s-price">€11</span>
             </div>
           </article>
-          <article class="spot">
+          <article class="spot reveal">
             <div class="photo-wrap">
               <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Grand%20Place%2C%20Brussels.jpg?width=1200" alt="布鲁塞尔大广场" loading="lazy" onerror="this.setAttribute('data-failed','')">
               <div class="photo-fallback">布鲁塞尔大广场</div>
@@ -432,7 +433,7 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
               <span class="s-price">€6</span>
             </div>
           </article>
-          <article class="spot">
+          <article class="spot reveal">
             <div class="photo-wrap">
               <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Bruxelles%20Manneken%20Pis.jpg?width=1200" alt="撒尿小童" loading="lazy" onerror="this.setAttribute('data-failed','')">
               <div class="photo-fallback">撒尿小童</div>
@@ -445,19 +446,19 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
           </article>
         </div>
         <div class="meal-grid">
-          <article class="meal">
+          <article class="meal reveal">
             <h4>午餐 · Maison Dandoy</h4>
             <p class="m-meal">比利时薯条</p>
             <p class="m-dish">薯条 €8</p>
             <span class="m-price">人均 €14（两店合计）</span>
           </article>
-          <article class="meal">
+          <article class="meal reveal">
             <h4>午餐 · Neuve Garage</h4>
             <p class="m-meal">比利时华夫饼</p>
             <p class="m-dish">华夫饼 €6</p>
             <span class="m-price">人均 €14（两店合计）</span>
           </article>
-          <article class="meal">
+          <article class="meal reveal">
             <h4>晚餐 · Maison Antoine</h4>
             <p class="m-meal">1870 比利时餐厅</p>
             <p class="m-dish">啤酒炖牛肉 €18 / 鸭胸 €24</p>
@@ -480,17 +481,17 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
         </details>
       </section>
       <!-- Day 3 -->
-      <section class="day" data-day="3" id="day-3">
+      <section class="day reveal" data-day="3" id="day-3">
         <header class="day-head">
           <div class="day-no">Day 3</div>
           <div class="day-meta">
             <div class="day-date">10月2日 · 周五 · 布鲁塞尔 → 阿姆斯特丹</div>
             <h3>布鲁塞尔 → 阿姆斯特丹 + 风车村 — 风车村 · 运河游船 · 水坝广场 · 九街</h3>
-            <p class="day-tags"><span class="chip">🇧🇪 比利时 → 🇳🇱 荷兰</span><span class="chip">跨境 · 242km</span><span class="chip">6 景点 + 3 餐</span></p>
+            <p class="day-tags"><span class="chip">🇧🇪 比利时 → 🇳🇱 荷兰</span><span class="chip">跨境 · 212km</span><span class="chip">6 景点 + 3 餐</span></p>
           </div>
         </header>
         <div class="spot-grid">
-          <article class="spot">
+          <article class="spot reveal">
             <div class="photo-wrap">
               <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Zaanse%20Schans%20windmills.jpg?width=1200" alt="风车村 Zaanse Schans" loading="lazy" onerror="this.setAttribute('data-failed','')">
               <div class="photo-fallback">风车村 Zaanse Schans</div>
@@ -501,7 +502,7 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
               <span class="s-price">免费入场</span>
             </div>
           </article>
-          <article class="spot">
+          <article class="spot reveal">
             <div class="photo-wrap">
               <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Amsterdam%20Canals%20-%20July%202006.jpg?width=1200" alt="阿姆斯特丹运河带" loading="lazy" onerror="this.setAttribute('data-failed','')">
               <div class="photo-fallback">阿姆斯特丹运河带</div>
@@ -512,7 +513,7 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
               <span class="s-price">€15 含中文导览</span>
             </div>
           </article>
-          <article class="spot">
+          <article class="spot reveal">
             <div class="photo-wrap">
               <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Dam%20Amsterdam%207308.jpg?width=1200" alt="水坝广场 Dam Square" loading="lazy" onerror="this.setAttribute('data-failed','')">
               <div class="photo-fallback">水坝广场 Dam Square</div>
@@ -523,7 +524,7 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
               <span class="s-price">免费</span>
             </div>
           </article>
-          <article class="spot">
+          <article class="spot reveal">
             <div class="s-body">
               <h4>九街 De Negen Straatjes 夜游</h4>
               <p class="s-tip">最文艺街区：精品店、古董店、小酒馆，夜晚灯光下运河倒映</p>
@@ -531,17 +532,17 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
           </article>
         </div>
         <div class="meal-grid">
-          <article class="meal">
+          <article class="meal reveal">
             <h4>早餐 · 比利时特色</h4>
             <p class="m-meal">早餐</p>
             <p class="m-dish">华夫饼 + 巧克力 + 薯条</p>
           </article>
-          <article class="meal">
+          <article class="meal reveal">
             <h4>午餐 · Albert Cuyp Market</h4>
             <p class="m-meal">午餐</p>
             <p class="m-dish">Stroopwafel €3 / 薯条 €5</p>
           </article>
-          <article class="meal">
+          <article class="meal reveal">
             <h4>晚餐 · De Eendracht</h4>
             <p class="m-meal">1919 最古老餐厅之一</p>
             <p class="m-dish">荷兰炖牛肉 €18 / 鲱鱼三明治 €7 / 奶酪拼盘 €18</p>
@@ -567,7 +568,7 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
           </div>
         </details>
       <!-- Day 4 -->
-      <section class="day" data-day="4" id="day-4">
+      <section class="day reveal" data-day="4" id="day-4">
         <header class="day-head">
           <div class="day-no">Day 4</div>
           <div class="day-meta">
@@ -577,7 +578,7 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
           </div>
         </header>
         <div class="spot-grid">
-          <article class="spot">
+          <article class="spot reveal">
             <div class="photo-wrap">
               <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Rijksmuseum%20Amsterdam.jpg?width=1200" alt="Rijksmuseum 国家博物馆" loading="lazy" onerror="this.setAttribute('data-failed','')">
               <div class="photo-fallback">Rijksmuseum 国家博物馆</div>
@@ -588,14 +589,14 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
               <span class="s-price">€20 提前预约</span>
             </div>
           </article>
-          <article class="spot">
+          <article class="spot reveal">
             <div class="s-body">
               <h4>博物馆广场 + 梵高博物馆外观</h4>
               <p class="s-tip">梵高博物馆外观拍照 · 海牙市政厅（Stadhuis）在广场旁</p>
               <span class="s-price">免费</span>
             </div>
           </article>
-          <article class="spot">
+          <article class="spot reveal">
             <div class="photo-wrap">
               <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/AnneFrankHouseAmsterdamtheNetherlands.jpg?width=1200" alt="安妮之家" loading="lazy" onerror="this.setAttribute('data-failed','')">
               <div class="photo-fallback">安妮之家</div>
@@ -606,14 +607,14 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
               <span class="s-price">€16 提前 2-3 个月预约</span>
             </div>
           </article>
-          <article class="spot">
+          <article class="spot reveal">
             <div class="s-body">
               <h4>Bloemenmarkt 花市</h4>
               <p class="s-tip">全球唯一浮动花卉市场，郁金香球茎 €3-5 伴手礼</p>
               <span class="s-price">免费</span>
             </div>
           </article>
-          <article class="spot">
+          <article class="spot reveal">
             <div class="photo-wrap">
               <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/K%C3%B6lner%20Dom%20nachts%202013.jpg?width=1200" alt="科隆大教堂" loading="lazy" onerror="this.setAttribute('data-failed','')">
               <div class="photo-fallback">科隆大教堂</div>
@@ -624,7 +625,7 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
               <span class="s-price">€7 登塔 394 级台阶</span>
             </div>
           </article>
-          <article class="spot">
+          <article class="spot reveal">
             <div class="photo-wrap">
               <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Hohenzollernbr%C3%BCcke%20K%C3%B6ln.jpg?width=1200" alt="霍亨索伦桥" loading="lazy" onerror="this.setAttribute('data-failed','')">
               <div class="photo-fallback">霍亨索伦桥</div>
@@ -637,19 +638,19 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
           </article>
         </div>
         <div class="meal-grid">
-          <article class="meal">
+          <article class="meal reveal">
             <h4>早午餐 · Pancakes Amsterdam</h4>
             <p class="m-meal">荷兰煎饼</p>
             <p class="m-dish">荷兰煎饼比可丽饼厚，甜咸都有</p>
             <span class="m-price">€8-10</span>
           </article>
-          <article class="meal">
+          <article class="meal reveal">
             <h4>午餐 · Früh Kölsch Brewery</h4>
             <p class="m-meal">科隆老城啤酒屋</p>
             <p class="m-dish">啤酒 €4/小杯、科隆香肠 €6、Reibekuchen 土豆饼 €5</p>
             <span class="m-price">人均 €10</span>
           </article>
-          <article class="meal">
+          <article class="meal reveal">
             <h4>晚餐 · Villa Le Rosey</h4>
             <p class="m-meal">米其林法餐厅</p>
             <p class="m-dish">鹅肝 €35 / 松露 €45</p>
@@ -676,7 +677,7 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
         </details>
       </section>
       <!-- Day 5 -->
-      <section class="day" data-day="5" id="day-5">
+      <section class="day reveal" data-day="5" id="day-5">
         <header class="day-head">
           <div class="day-no">Day 5</div>
           <div class="day-meta">
@@ -686,7 +687,7 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
           </div>
         </header>
         <div class="spot-grid">
-          <article class="spot">
+          <article class="spot reveal">
             <div class="photo-wrap">
               <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Bock%20casemates%2C%20Luxembourg%20-%20panoramio%20%282%29.jpg?width=1200" alt="佩特罗斯大峡谷" loading="lazy" onerror="this.setAttribute('data-failed','')">
               <div class="photo-fallback">佩特罗斯大峡谷 Bock Casemates</div>
@@ -697,14 +698,14 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
               <span class="s-price">€7 地道约 1h</span>
             </div>
           </article>
-          <article class="spot">
+          <article class="spot reveal">
             <div class="s-body">
               <h4>卢森堡老城</h4>
               <p class="s-tip">王宫 + 大剧院 + 亚当桥 + Calvarieberg 最佳全景俯瞰点</p>
               <span class="s-price">免费</span>
             </div>
           </article>
-          <article class="spot">
+          <article class="spot reveal">
             <div class="photo-wrap">
               <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Palace%20of%20Versailles%20Gardens%20France.jpg?width=1200" alt="凡尔赛宫" loading="lazy" onerror="this.setAttribute('data-failed','')">
               <div class="photo-fallback">凡尔赛宫</div>
@@ -717,19 +718,19 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
           </article>
         </div>
         <div class="meal-grid">
-          <article class="meal">
+          <article class="meal reveal">
             <h4>午餐 · Judd mat Gaardebounen</h4>
             <p class="m-meal">卢森堡特色</p>
             <p class="m-dish">烟熏猪肉配蚕豆</p>
             <span class="m-price">€14</span>
           </article>
-          <article class="meal">
+          <article class="meal reveal">
             <h4>午餐 · 凡尔赛镇 La Maison Rose / Le Grand Véfour</h4>
             <p class="m-meal">凡尔赛镇午餐（二选一）</p>
             <p class="m-dish">La Maison Rose 粉色小屋 €18 / Le Grand Véfour €25-35</p>
             <span class="m-price">€18-35 · 停车 Parking Place d'Armes €2.50/h</span>
           </article>
-          <article class="meal">
+          <article class="meal reveal">
             <h4>晚餐 · Bouillon Chartier</h4>
             <p class="m-meal">百年食堂（1896）· 复古金色装修</p>
             <p class="m-dish">焗蜗牛 €8 / 油封鸭腿 €12 / 煎蛋卷 €9</p>
@@ -753,7 +754,7 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
         </details>
       </section>
       <!-- Day 6 -->
-      <section class="day" data-day="6" id="day-6">
+      <section class="day reveal" data-day="6" id="day-6">
         <header class="day-head">
           <div class="day-no">Day 6</div>
           <div class="day-meta">
@@ -763,7 +764,7 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
           </div>
         </header>
         <div class="spot-grid">
-          <article class="spot">
+          <article class="spot reveal">
             <div class="photo-wrap">
               <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Sainte%20Chapelle%20Interior%20Stained%20Glass.jpg?width=1200" alt="圣礼拜堂" loading="lazy" onerror="this.setAttribute('data-failed','')">
               <div class="photo-fallback">圣礼拜堂</div>
@@ -774,14 +775,14 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
               <span class="s-price">€11</span>
             </div>
           </article>
-          <article class="spot">
+          <article class="spot reveal">
             <div class="s-body">
               <h4>玛莱区 + 孚日广场</h4>
               <p class="s-tip">巴黎最优雅广场（16 世纪），LVMH 基金会免费，精品店 + 古着店</p>
               <span class="s-price">免费</span>
             </div>
           </article>
-          <article class="spot">
+          <article class="spot reveal">
             <div class="photo-wrap">
               <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Seine%20River%20and%20the%20Eiffel%20Tower%2C%2027%20October%202012%20-%20panoramio.jpg?width=1200" alt="塞纳河游船" loading="lazy" onerror="this.setAttribute('data-failed','')">
               <div class="photo-fallback">塞纳河游船</div>
@@ -792,14 +793,14 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
               <span class="s-price">€15 含中文导览 1.5h</span>
             </div>
           </article>
-          <article class="spot">
+          <article class="spot reveal">
             <div class="s-body">
               <h4>老佛爷 / 春天百货</h4>
               <p class="s-tip">香水 Chanel/Dior、化妆品 L'Occitane、Ladurée 马卡龙</p>
               <span class="s-price">免费</span>
             </div>
           </article>
-          <article class="spot">
+          <article class="spot reveal">
             <div class="photo-wrap">
               <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Paris%20Jardin%20des%20Tuileries%20printemps%202014.jpg?width=1200" alt="杜乐丽花园" loading="lazy" onerror="this.setAttribute('data-failed','')">
               <div class="photo-fallback">杜乐丽花园</div>
@@ -810,7 +811,7 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
               <span class="s-price">€11.5</span>
             </div>
           </article>
-          <article class="spot">
+          <article class="spot reveal">
             <div class="s-body">
               <h4>特罗卡德罗铁塔日落夜景</h4>
               <p class="s-tip">日落约 19:00，整点闪烁 5 分钟，特罗卡德罗正对铁塔 = 最佳拍照点</p>
@@ -819,13 +820,13 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
           </article>
         </div>
         <div class="meal-grid">
-          <article class="meal">
+          <article class="meal reveal">
             <h4>午餐 · L'As du Fallafel / Breizh Café</h4>
             <p class="m-meal">玛莱区午餐（二选一）</p>
             <p class="m-dish">法拉费 €7（排队名店）/ 顶级可丽饼 €25（布列塔尼风格）</p>
             <span class="m-price">€7-25</span>
           </article>
-          <article class="meal">
+          <article class="meal reveal">
             <h4>告别晚餐 · Les Ombres</h4>
             <p class="m-meal">屋顶餐厅 · 俯瞰铁塔夜景</p>
             <p class="m-dish">海鲜拼盘 €35 / 鹅肝 €28</p>
@@ -849,7 +850,7 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
         </details>
       </section>
       <!-- Day 7 -->
-      <section class="day" data-day="7" id="day-7">
+      <section class="day reveal" data-day="7" id="day-7">
         <header class="day-head">
           <div class="day-no">Day 7</div>
           <div class="day-meta">
@@ -859,14 +860,14 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
           </div>
         </header>
         <div class="spot-grid">
-          <article class="spot">
+          <article class="spot reveal">
             <div class="s-body">
               <h4>奥斯曼大街漫步</h4>
               <p class="s-tip">花神咖啡馆 Café de Flore €5，萨特波伏娃据点</p>
               <span class="s-price">免费</span>
             </div>
           </article>
-          <article class="spot">
+          <article class="spot reveal">
             <div class="s-body">
               <h4>蓬皮杜艺术中心外观</h4>
               <p class="s-tip">彩色管道外露，内部 €14</p>
@@ -875,13 +876,13 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
           </article>
         </div>
         <div class="meal-grid">
-          <article class="meal">
+          <article class="meal reveal">
             <h4>最后一餐 · Angelina</h4>
             <p class="m-meal">法式甜点</p>
             <p class="m-dish">热巧克力 €8 巴黎最浓稠、圣多诺黑 €10</p>
             <span class="m-price">€8-10</span>
           </article>
-          <article class="meal" style="background:linear-gradient(135deg,#e8f0fe,#f5f5f7);border:2px solid var(--blue);text-align:center;padding:20px 16px">
+          <article class="meal reveal" style="background:linear-gradient(135deg,#e8f0fe,#f5f5f7);border:2px solid var(--blue);text-align:center;padding:20px 16px">
             <h4 style="font-size:17px;color:var(--blue)">✈️ 22:00 CDG → 北京 · 飞行约 11 小时 · 时差 -7h · 预计 10 月 7 日中午抵达</h4>
           </article>
         </div>
@@ -904,37 +905,37 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
     </div>
   </section>
   <section id="culture">
-    <div class="section-head">
+    <div class="section-head reveal">
       <div class="kicker">Local Flavor</div>
       <h2>国家风情</h2>
       <p>五国四味——把路上的风土人情装进心里</p>
     </div>
     <div class="container country-grid">
-      <article class="country" style="--acc:#0a84ff">
+      <article class="country reveal" style="--acc:#0a84ff">
         <div class="c-flag">🇫🇷</div>
         <h3>法国 · 艺术与咖啡</h3>
         <p class="c-desc">露天咖啡座是法国人的客厅——花神咖啡馆里萨特写下存在主义，清晨的牛角包配浓缩咖啡是每天的仪式。</p>
         <div class="c-list"><span>🍽 焗蜗牛 · 油封鸭腿 · 可丽饼 · 马卡龙</span><span>📍 铁塔晨光 · 塞纳河游船 · 蒙马特日落</span></div>
       </article>
-      <article class="country" style="--acc:#ff3b30">
+      <article class="country reveal" style="--acc:#ff3b30">
         <div class="c-flag">🇧🇪</div>
         <h3>比利时 · 巧克力与漫画</h3>
         <p class="c-desc">布鲁塞尔大广场被誉为欧洲最美客厅，撒尿小童的传说流传四百年——薯条与华夫饼在这里才是正统。</p>
         <div class="c-list"><span>🍽 比利时薯条 · 华夫饼 · Neuhaus 巧克力</span><span>📍 大广场夜景 · 圣于贝尔拱廊街</span></div>
       </article>
-      <article class="country" style="--acc:#ff9f0a">
+      <article class="country reveal" style="--acc:#ff9f0a">
         <div class="c-flag">🇳🇱</div>
         <h3>荷兰 · 风车与自行车</h3>
         <p class="c-desc">比海平面低 7 米的国度里，风车与运河是千年智慧的雕塑——骑行和游船，是打开阿姆斯特丹的正确方式。</p>
         <div class="c-list"><span>🍽 Stroopwafel · 奶酪 · 鲱鱼三明治</span><span>📍 风车村 · 运河日落游船 · 九街夜游</span></div>
       </article>
-      <article class="country" style="--acc:#bf5af2">
+      <article class="country reveal" style="--acc:#bf5af2">
         <div class="c-flag">🇩🇪</div>
         <h3>德国 · 哥特与啤酒</h3>
         <p class="c-desc">科隆大教堂建了 632 年——哥特式巅峰之下，一小杯 Kölsch 配一根香肠，就是科隆人的下午茶。</p>
         <div class="c-list"><span>🍽 科隆香肠 · Kölsch 啤酒 · 土豆饼</span><span>📍 大教堂登塔 · 爱情锁桥 · 莱茵河畔</span></div>
       </article>
-      <article class="country" style="--acc:#64d2ff">
+      <article class="country reveal" style="--acc:#64d2ff">
         <div class="c-flag">🇱🇺</div>
         <h3>卢森堡 · 袖珍公国</h3>
         <p class="c-desc">欧盟最小的首都之一，却有欧洲最深的峡谷——站在 Calvarieberg 俯瞰老城，仿佛中世纪画卷铺展脚下。</p>
@@ -943,52 +944,52 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
     </div>
   </section>
   <section id="budget">
-    <div class="section-head">
+    <div class="section-head reveal">
       <div class="kicker">Budget</div>
       <h2>预算参考</h2>
       <p>人均 €1,540–2,300（约 ¥12,000–18,500，不含国际机票）</p>
     </div>
     <div class="container budget-grid">
-      <article class="budget-item"><div class="b-name">租车 · 7 天 SUV</div><div class="b-amt">€200–300<small>/人</small></div><div class="b-note">全险（CDW + THEP）· 推荐标致 3008 / 宝马 X1</div></article>
-      <article class="budget-item"><div class="b-name">燃油 · 1,502km</div><div class="b-amt">€100–130<small>/人</small></div><div class="b-note">按 8L/100km × €1.8/L 估算</div></article>
-      <article class="budget-item"><div class="b-name">过路费</div><div class="b-amt">€20–25<small>/人</small></div><div class="b-note">仅法国段收费，荷/德高速免费</div></article>
-      <article class="budget-item"><div class="b-name">停车 · 6 天</div><div class="b-amt">€50–75<small>/人</small></div><div class="b-note">市区 €2.5–5/h · 风车村 P1/P2 免费</div></article>
-      <article class="budget-item"><div class="b-name">酒店 · 6 晚四星</div><div class="b-amt">€600–900<small>/人</small></div><div class="b-note">€200–300/晚 · 阿姆斯特丹选带停车场</div></article>
-      <article class="budget-item"><div class="b-name">餐饮 · 7 天</div><div class="b-amt">€400–550<small>/人</small></div><div class="b-note">法餐 + 当地小吃，含 2 顿米其林体验</div></article>
-      <article class="budget-item"><div class="b-name">景点门票</div><div class="b-amt">€170–220<small>/人</small></div><div class="b-note">含罗浮宫、凡尔赛、博物馆等全部预约票</div></article>
+      <article class="budget-item reveal"><div class="b-name">租车 · 7 天 SUV</div><div class="b-amt">€200–300<small>/人</small></div><div class="b-note">全险（CDW + THEP）· 推荐标致 3008 / 宝马 X1</div></article>
+      <article class="budget-item reveal"><div class="b-name">燃油 · 1,502km</div><div class="b-amt">€100–130<small>/人</small></div><div class="b-note">按 8L/100km × €1.8/L 估算</div></article>
+      <article class="budget-item reveal"><div class="b-name">过路费</div><div class="b-amt">€20–25<small>/人</small></div><div class="b-note">仅法国段收费，荷/德高速免费</div></article>
+      <article class="budget-item reveal"><div class="b-name">停车 · 6 天</div><div class="b-amt">€50–75<small>/人</small></div><div class="b-note">市区 €2.5–5/h · 风车村 P1/P2 免费</div></article>
+      <article class="budget-item reveal"><div class="b-name">酒店 · 6 晚四星</div><div class="b-amt">€600–900<small>/人</small></div><div class="b-note">€200–300/晚 · 阿姆斯特丹选带停车场</div></article>
+      <article class="budget-item reveal"><div class="b-name">餐饮 · 7 天</div><div class="b-amt">€400–550<small>/人</small></div><div class="b-note">法餐 + 当地小吃，含 2 顿米其林体验</div></article>
+      <article class="budget-item reveal"><div class="b-name">景点门票</div><div class="b-amt">€170–220<small>/人</small></div><div class="b-note">含罗浮宫、凡尔赛、博物馆等全部预约票</div></article>
       <article class="budget-item total"><div class="b-name">每人总计（不含机票）</div><div class="b-amt">€1,540–2,300<small>≈ ¥12,000–18,500</small></div><div class="b-note">7 天 6 晚 · 五国 · 含全部住宿与餐食</div></article>
     </div>
   </section>
   <section id="bookings">
-    <div class="section-head">
+    <div class="section-head reveal">
       <div class="kicker">Bookings</div>
       <h2>出发前 · 必预订清单</h2>
       <p>热门景点必须提前预约时段，7 项缺一不可</p>
     </div>
     <div class="container booking-list">
-      <div class="booking"><span class="b-n">01</span><div><b>租车</b><p>提前 1 个月 · Hertz / Sixt · 中型 SUV + 全险</p></div></div>
-      <div class="booking"><span class="b-n">02</span><div><b>梵高博物馆</b><p>提前 2-3 个月官网 · €20</p></div></div>
-      <div class="booking"><span class="b-n">03</span><div><b>安妮之家</b><p>提前 2-3 个月官网 · €16</p></div></div>
-      <div class="booking"><span class="b-n">04</span><div><b>罗浮宫</b><p>提前 2-4 周官网预约时段 · €17</p></div></div>
-      <div class="booking"><span class="b-n">05</span><div><b>凡尔赛宫</b><p>提前 2-4 周官网 · €20</p></div></div>
-      <div class="booking"><span class="b-n">06</span><div><b>Rijksmuseum</b><p>提前 1-2 周官网 · €20 · ⭐ 新增</p></div></div>
-      <div class="booking"><span class="b-n">07</span><div><b>热门餐厅</b><p>Le Foyot / Les Ombres / Maison Antoine 提前 1-2 周</p></div></div>
+      <div class="booking reveal"><span class="b-n">01</span><div><b>租车</b><p>提前 1 个月 · Hertz / Sixt · 中型 SUV + 全险</p></div></div>
+      <div class="booking reveal"><span class="b-n">02</span><div><b>梵高博物馆</b><p>提前 2-3 个月官网 · €20</p></div></div>
+      <div class="booking reveal"><span class="b-n">03</span><div><b>安妮之家</b><p>提前 2-3 个月官网 · €16</p></div></div>
+      <div class="booking reveal"><span class="b-n">04</span><div><b>罗浮宫</b><p>提前 2-4 周官网预约时段 · €17</p></div></div>
+      <div class="booking reveal"><span class="b-n">05</span><div><b>凡尔赛宫</b><p>提前 2-4 周官网 · €20</p></div></div>
+      <div class="booking reveal"><span class="b-n">06</span><div><b>Rijksmuseum</b><p>提前 1-2 周官网 · €20 · ⭐ 新增</p></div></div>
+      <div class="booking reveal"><span class="b-n">07</span><div><b>热门餐厅</b><p>Le Foyot / Les Ombres / Maison Antoine 提前 1-2 周</p></div></div>
     </div>
   </section>
   <section id="tips">
-    <div class="section-head">
+    <div class="section-head reveal">
       <div class="kicker">Practical Tips</div>
       <h2>实用贴士</h2>
     </div>
     <div class="container tips-grid">
-      <div class="tip-card"><span class="t-icon">🛂</span><b>签证</b><p>护照有效期 6 个月以上 + 申根签证</p></div>
-      <div class="tip-card"><span class="t-icon">🚗</span><b>限速</b><p>法国高速 130（雨 110）· 荷兰 100/130 · 德国不限速（建议 120-130）</p></div>
-      <div class="tip-card"><span class="t-icon">🅿️</span><b>停车</b><p>市区 €2.5-7/h · P+R €5-10/天含公交 · 风车村 P1/P2 免费</p></div>
-      <div class="tip-card"><span class="t-icon">⛽</span><b>加油</b><p>每到一个城市先加满再上高速</p></div>
-      <div class="tip-card"><span class="t-icon">🌦</span><b>天气</b><p>10 月 12-18°C · 带外套 + 雨伞 + 舒适步行鞋</p></div>
-      <div class="tip-card"><span class="t-icon">💶</span><b>货币</b><p>五国全部使用欧元 € · 备少量现金（海关申报线 €10,000）</p></div>
-      <div class="tip-card"><span class="t-icon">📱</span><b>手机</b><p>欧洲漫游或 eSIM（Airalo / Holafly）</p></div>
-      <div class="tip-card"><span class="t-icon">🛡</span><b>保险</b><p>欧洲旅行医疗保险 + 租车全险（CDW + THEP）</p></div>
+      <div class="tip-card reveal"><span class="t-icon">🛂</span><b>签证</b><p>护照有效期 6 个月以上 + 申根签证</p></div>
+      <div class="tip-card reveal"><span class="t-icon">🚗</span><b>限速</b><p>法国高速 130（雨 110）· 荷兰 100/130 · 德国不限速（建议 120-130）</p></div>
+      <div class="tip-card reveal"><span class="t-icon">🅿️</span><b>停车</b><p>市区 €2.5-7/h · P+R €5-10/天含公交 · 风车村 P1/P2 免费</p></div>
+      <div class="tip-card reveal"><span class="t-icon">⛽</span><b>加油</b><p>每到一个城市先加满再上高速</p></div>
+      <div class="tip-card reveal"><span class="t-icon">🌦</span><b>天气</b><p>10 月 12-18°C · 带外套 + 雨伞 + 舒适步行鞋</p></div>
+      <div class="tip-card reveal"><span class="t-icon">💶</span><b>货币</b><p>五国全部使用欧元 € · 备少量现金（海关申报线 €10,000）</p></div>
+      <div class="tip-card reveal"><span class="t-icon">📱</span><b>手机</b><p>欧洲漫游或 eSIM（Airalo / Holafly）</p></div>
+      <div class="tip-card reveal"><span class="t-icon">🛡</span><b>保险</b><p>欧洲旅行医疗保险 + 租车全险（CDW + THEP）</p></div>
     </div>
   </section>
 </main>
@@ -1044,6 +1045,46 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
+})();
+</script>
+<script>
+(function(){
+  // 滚动渐入（等 DOMContentLoaded：确保地图离线隐藏（display:none）先于观察，
+  // 被隐藏元素直接标记 .in，不依赖 IntersectionObserver 回调）
+  function initReveal(){
+    var revealEls = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+          if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+        });
+      }, {threshold:.05});
+      revealEls.forEach(function(el){
+        if (el.getClientRects().length) io.observe(el);
+        else el.classList.add('in');
+      });
+    } else {
+      revealEls.forEach(function(el){ el.classList.add('in'); });
+    }
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initReveal);
+  else initReveal();
+  // 导航：滚过 8px 后加阴影
+  var nav = document.getElementById('topnav');
+  function onScroll(){
+    nav.classList.toggle('scrolled', window.scrollY > 8);
+    var links = document.querySelectorAll('.nav-link');
+    var cur = 'hero';
+    document.querySelectorAll('main > section[id]').forEach(function(sec){
+      if (sec.getBoundingClientRect().top <= 160) cur = sec.id;
+    });
+    links.forEach(function(l){
+      l.style.color = ('#' + l.getAttribute('href').slice(1)) === ('#' + cur) ? 'var(--ink)' : '';
+      l.style.fontWeight = ('#' + l.getAttribute('href').slice(1)) === ('#' + cur) ? '600' : '';
+    });
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
 })();
 </script>
 </body>
