@@ -82,6 +82,18 @@ li.tl .det span{color:var(--ink2);font-size:13px}
   li.tl .ty{grid-column:2;padding-top:0}
   #topnav .brand{font-size:15px}
 }
+/* SVG 路线总览图 */
+.route-card{overflow:hidden}
+.route-line{fill:none;stroke:url(#routeGrad);stroke-width:4;stroke-linecap:round;stroke-dasharray:1400;stroke-dashoffset:1400;animation:draw 2.4s cubic-bezier(.4,0,.2,1) forwards}
+.route-line.sub{stroke-width:3;stroke-dasharray:600 14;animation-delay:.4s}
+@keyframes draw{to{stroke-dashoffset:0}}
+.dist{font-size:13px;font-weight:600;fill:#86868b;font-variant-numeric:tabular-nums}
+.city{cursor:pointer}
+.city-dot{fill:#0071e3;stroke:#fff;stroke-width:3;transition:r .2s, fill .2s}
+.city:hover .city-dot{fill:#0077ed}
+.city-name{font-size:15px;font-weight:600;fill:#1d1d1f;text-anchor:middle}
+.city.sub .city-dot{fill:#ff9f0a}
+.route-note{margin-top:16px;font-size:13px;color:var(--ink2);text-align:center}
 </style>
 </head>
 <body>
@@ -120,7 +132,53 @@ li.tl .det span{color:var(--ink2);font-size:13px}
     </div>
   </section>
   <!-- Task 3 填充 SVG 路线图 -->
-  <section id="route"></section>
+  <section id="route">
+  <div class="section-head">
+    <div class="kicker">The Route</div>
+    <h2>整体路线</h2>
+    <p>一次穿越五国的环形自驾——巴黎出发，逆时针驶过比利时、荷兰、德国与卢森堡，最后回到巴黎。</p>
+  </div>
+  <div class="container">
+    <div class="card route-card">
+      <svg viewBox="0 0 900 560" role="img" aria-label="欧洲自驾路线图">
+        <defs>
+          <linearGradient id="routeGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#0071e3"/><stop offset="1" stop-color="#5ac8fa"/>
+          </linearGradient>
+          <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#0071e3"/>
+          </marker>
+        </defs>
+        <!-- 分段路线（顺序：巴黎→布鲁塞尔→阿姆斯特丹→风车村(支线)→阿姆斯特丹→科隆→卢森堡→凡尔赛→巴黎） -->
+        <path class="route-line" d="M346.7,407.1 Q440,300 526.7,242.9" />
+        <path class="route-line" d="M526.7,242.9 Q560,160 576.4,118.0" />
+        <path class="route-line" d="M576.4,118.0 L568.4,109.2" marker-end="url(#arrow)"/>
+        <path class="route-line sub" d="M568.4,109.2 L576.4,118.0"/>
+        <path class="route-line" d="M576.4,118.0 Q680,140 761.4,235.8" />
+        <path class="route-line" d="M761.4,235.8 Q730,300 686.9,344.9" />
+        <path class="route-line" d="M686.9,344.9 Q520,400 325.8,411.4" />
+        <path class="route-line" d="M325.8,411.4 Q330,410 346.7,407.1" />
+        <!-- 距离标注 -->
+        <text class="dist" x="420" y="300">312km</text>
+        <text class="dist" x="600" y="160">212km</text>
+        <text class="dist" x="560" y="96">15km</text>
+        <text class="dist" x="690" y="175">261km</text>
+        <text class="dist" x="740" y="305">203km</text>
+        <text class="dist" x="480" y="420">381km</text>
+        <text class="dist" x="318" y="430">23km</text>
+        <!-- 城市节点 -->
+        <a href="#day-1" data-city="巴黎" class="city" transform="translate(346.7,407.1)"><circle r="9" class="city-dot"/><text class="city-name" y="-16">巴黎</text></a>
+        <a href="#day-2" data-city="布鲁塞尔" class="city" transform="translate(526.7,242.9)"><circle r="9" class="city-dot"/><text class="city-name" y="-16">布鲁塞尔</text></a>
+        <a href="#day-3" data-city="阿姆斯特丹" class="city" transform="translate(576.4,118.0)"><circle r="9" class="city-dot"/><text class="city-name" y="-16">阿姆斯特丹</text></a>
+        <a href="#day-3" data-city="风车村" class="city sub" transform="translate(568.4,109.2)"><circle r="6" class="city-dot"/><text class="city-name" y="-14">风车村</text></a>
+        <a href="#day-4" data-city="科隆" class="city" transform="translate(761.4,235.8)"><circle r="9" class="city-dot"/><text class="city-name" y="-16">科隆</text></a>
+        <a href="#day-4" data-city="卢森堡" class="city" transform="translate(686.9,344.9)"><circle r="9" class="city-dot"/><text class="city-name" y="26">卢森堡</text></a>
+        <a href="#day-5" data-city="凡尔赛" class="city" transform="translate(325.8,411.4)"><circle r="7" class="city-dot"/><text class="city-name" y="26">凡尔赛</text></a>
+      </svg>
+      <p class="route-note">▲ 数字为各段自驾里程 · 风车村为阿姆斯特丹当日往返支线 · 全程 1,502km</p>
+    </div>
+  </div>
+</section>
   <!-- Task 5 填充 Leaflet 地图 -->
   <section id="map"></section>
   <!-- Task 3 填充七日行程卡 -->
