@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>欧洲自驾 · 七日五国 — 2026.9.30-10.6</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <style>
 :root{
   --bg:#f5f5f7; --card:#fff; --ink:#1d1d1f; --ink2:#6e6e73; --blue:#0071e3; --blue2:#0077ed;
@@ -180,7 +180,18 @@ li.tl .det span{color:var(--ink2);font-size:13px}
   </div>
 </section>
   <!-- Task 5 填充 Leaflet 地图 -->
-  <section id="map"></section>
+  <section id="map">
+  <div class="section-head">
+    <div class="kicker">Interactive Map</div>
+    <h2>交互地图</h2>
+    <p>点击城市标记，直达对应行程日。</p>
+  </div>
+  <div class="container">
+    <div class="card" style="padding:10px">
+      <div id="map-canvas" style="height:520px;border-radius:16px;overflow:hidden"></div>
+    </div>
+  </div>
+</section>
   <!-- Task 3 填充七日行程卡 -->
   <section id="itinerary"></section>
   <!-- Task 4 填充风情板块 -->
@@ -195,7 +206,50 @@ li.tl .det span{color:var(--ink2);font-size:13px}
 <footer>
   <p>返程信息：10/6 22:00 CDG→北京 ✈️，时差 -7h，预计 10/7 中午抵达</p>
 </footer>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
-<script>/* 后续任务填充增强脚本 */</script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+(function(){
+  var cityData = [
+    {name:'巴黎',       lat:48.8566, lng:2.3522,  day:1},
+    {name:'布鲁塞尔',   lat:50.8503, lng:4.3517,  day:2},
+    {name:'阿姆斯特丹', lat:52.3676, lng:4.9041,  day:3},
+    {name:'风车村',     lat:52.4740, lng:4.8160,  day:3, sub:true},
+    {name:'科隆',       lat:50.9375, lng:6.9603,  day:4},
+    {name:'卢森堡市',   lat:49.6116, lng:6.1319,  day:4},
+    {name:'凡尔赛',     lat:48.8049, lng:2.1204,  day:5},
+    {name:'巴黎(返程)', lat:48.8566, lng:2.3522,  day:6}
+  ];
+  function boot(){
+    if (typeof L === 'undefined') {          // 离线降级：隐藏板块
+      var sec = document.getElementById('map');
+      if (sec) sec.style.display = 'none';
+      return;
+    }
+    var map = L.map('map-canvas', {scrollWheelZoom:false}).setView([50.8, 4.5], 7);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+    var line = cityData.filter(function(c){return !c.sub;}).map(function(c){return [c.lat, c.lng];});
+    L.polyline(line, {color:'#0071e3', weight:4, opacity:.85, dashArray:'2 10'}).addTo(map);
+    if (cityData[2] && cityData[3]) {
+      L.polyline([[cityData[2].lat,cityData[2].lng],[cityData[3].lat,cityData[3].lng]],
+        {color:'#ff9f0a', weight:3, dashArray:'4 6'}).addTo(map);
+    }
+    cityData.forEach(function(c){
+      var marker = L.circleMarker([c.lat, c.lng], {
+        radius: c.sub ? 6 : 9, color:'#fff', weight:2.5,
+        fillColor: c.sub ? '#ff9f0a' : '#0071e3', fillOpacity:1
+      });
+      marker.bindTooltip(c.name, {direction:'top', offset:[0,-6]});
+      marker.on('click', function(){ location.hash = '#day-' + c.day; });
+      marker.addTo(map);
+    });
+    map.fitBounds(L.latLngBounds(line.concat([[cityData[3].lat,cityData[3].lng]])), {padding:[40,40]});
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+</script>
 </body>
 </html>
