@@ -164,6 +164,12 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
 .r-title{font-size:clamp(19px,3vw,26px);font-weight:700;letter-spacing:-.015em}
 .return-card p{margin-top:10px;color:#d2d2d7;font-size:15px}
 .foot-note{text-align:center;font-size:13px;color:var(--ink2)}
+/* Task 11: 预订卡 */
+.meal.stay{background:linear-gradient(160deg,#f0fdf5,#fbfbfd)}
+.meal.stay .m-price{background:#e6f6ee;color:#1d7f4e}
+.meal.flight{background:linear-gradient(160deg,#eef4ff,#fbfbfd)}
+.meal.flight .m-price{background:#e6f0ff;color:#0071e3}
+.meal .m-en{display:block;font-size:12px;color:var(--ink2);margin-top:2px}
 </style>
 </head>
 <body>
@@ -347,6 +353,18 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
           </article>
         </div>
         <div class="meal-grid">
+          <article class="meal flight"><h4>✈️ AF0201 · 法航 Premium 舱</h4>
+            <div class="m-en">9/29（周二）23:05 北京首都 T2 → 9/30 05:50 巴黎戴高乐 T2E</div>
+            <div class="m-meal">北京 (PEK) 2 号航站楼 → 巴黎 (CDG) 2E 航站楼</div>
+            <div class="m-dish">值机截止 22:05（出发当晚）· 行李 2×23kg · 往返机票已出票 ¥18,229/人</div>
+            <div class="m-price">已出票 ✓</div>
+          </article>
+          <article class="meal stay"><h4>🏨 巴黎格勒内勒埃菲尔铁塔美居酒店</h4>
+            <div class="m-en">Mercure Paris Tour Eiffel Grenelle</div>
+            <div class="m-meal">64 Bd de Grenelle, 75015 Paris · 9/30 15:00 后入住 → 10/1 12:00 前退房</div>
+            <div class="m-dish">含 10/1 双人自助早餐 · 城市税 €16.90 到店付 · 携程预订</div>
+            <div class="m-price">¥2,265 / 晚</div>
+          </article>
           <article class="meal reveal">
             <h4>早餐 · 附近 Boulangerie</h4>
             <p class="m-meal">早餐</p>
@@ -370,11 +388,11 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
           <summary>展开完整时刻表（16 项）</summary>
           <div class="tl-list">
             <ul class="tl">
-              <li class="tl"><div class="t">06:00</div><div class="ty">航班</div><div class="det"><b>抵达巴黎戴高乐机场 CDG T2</b><span>准备好申根签证、入境文件、海关申报</span></div></li>
+              <li class="tl"><div class="t">05:50</div><div class="ty">航班</div><div class="det"><b>AF0201 抵达巴黎戴高乐机场（CDG）T2E 航站楼</b><span>法航 Premium 舱 · 行李 2×23kg · 准备好申根签证、入境文件、海关申报</span></div></li>
               <li class="tl"><div class="t">06:00-07:00</div><div class="ty">交通</div><div class="det"><b>入境手续 + 提取行李</b><span>机场内步行 · 法国海关现金 €10000+ 需申报</span></div></li>
-              <li class="tl"><div class="t">07:00-08:00</div><div class="ty">租车</div><div class="det"><b>租车柜台取车（Hertz / Sixt / Europcar）</b><span>选中型 SUV + 全险，检查车身拍照 · 推荐标致 3008 / 宝马 X1</span></div></li>
+              <li class="tl"><div class="t">06:30-07:00</div><div class="ty">租车</div><div class="det"><b>SIXT 柜台取车（奔驰 C 级自动挡）</b><span>门店位于 T1/T2D 到达层，步行约 15min · 携带驾照原件 + 翻译认证件 + 芯片信用卡 · 跨境多国须提前告知门店登记目的地（否则保险可能失效）</span></div></li>
               <li class="tl"><div class="t">08:00-09:00</div><div class="ty">驾车</div><div class="det"><b>CDG → 巴黎市区酒店</b><span>28km / 36min · A1 高速 €4.5 → Périphérique 环线</span></div></li>
-              <li class="tl"><div class="t">09:00-09:30</div><div class="ty">住宿</div><div class="det"><b>办理入住、寄存行李</b><span>推荐 1区/4区（市中心）或 15区（性价比）· 停车 €30-50/晚</span></div></li>
+              <li class="tl"><div class="t">09:00-09:30</div><div class="ty">住宿</div><div class="det"><b>入住巴黎格勒内勒埃菲尔铁塔美居酒店</b><span>64 Bd de Grenelle, 75015 · 15:00 后正式入住，行李可先寄存 · 停车 €30-50/晚</span></div></li>
               <li class="tl"><div class="t">09:30-10:00</div><div class="ty">餐饮</div><div class="det"><b>简单早餐：牛角包 + 咖啡</b><span>或酒店早餐 €15-25</span></div></li>
               <li class="tl"><div class="t">10:00-11:30</div><div class="ty">景点</div><div class="det"><b>埃菲尔铁塔 + 战神广场</b><span>距酒店约 4km/12min · 清晨人最少，登二层 €18.80，最佳拍照点战神广场正对面 / 特罗卡德罗</span></div></li>
               <li class="tl"><div class="t">11:30-12:00</div><div class="ty">驾车</div><div class="det"><b>铁塔 → 罗浮宫</b><span>4km / 12min · 停车 Parking Quai Branly €3.10/h</span></div></li>
@@ -447,6 +465,12 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
           </article>
         </div>
         <div class="meal-grid">
+          <article class="meal stay"><h4>🏨 布鲁塞尔大广场希尔顿酒店</h4>
+            <div class="m-en">Hilton Brussels Grand Place</div>
+            <div class="m-meal">Carr de l'Europe 3, 1000 Brussels · 10/1 15:00 后入住 → 10/2 11:00 前退房</div>
+            <div class="m-dish">含 10/2 双人早餐 · 押金 €50（信用卡）· 携程预订</div>
+            <div class="m-price">¥1,952 / 晚</div>
+          </article>
           <article class="meal reveal">
             <h4>午餐 · Maison Dandoy</h4>
             <p class="m-meal">比利时薯条</p>
@@ -533,6 +557,12 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
           </article>
         </div>
         <div class="meal-grid">
+          <article class="meal stay"><h4>🏨 南阿姆斯特丹 NH 酒店</h4>
+            <div class="m-en">NH Amsterdam Zuid</div>
+            <div class="m-meal">Van Leijenberghlaan 221, 1082 GG Amsterdam · 10/2 15:00 后入住 → 10/3 12:00 前退房</div>
+            <div class="m-dish">含 10/3 双人自助早餐 · 城市税 €14.96 到店付 · 携程预订</div>
+            <div class="m-price">¥1,063 / 晚</div>
+          </article>
           <article class="meal reveal">
             <h4>早餐 · 比利时特色</h4>
             <p class="m-meal">早餐</p>
@@ -639,6 +669,12 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
           </article>
         </div>
         <div class="meal-grid">
+          <article class="meal stay"><h4>🏨 卢森堡万豪阿尔法酒店</h4>
+            <div class="m-en">Luxembourg Marriott Hotel Alfa</div>
+            <div class="m-meal">16 Pl. de la Gare, 1616 Luxembourg · 10/3 16:00 起入住 → 10/4 12:00 前退房</div>
+            <div class="m-dish">中央火车站旁 · 押金 €50/晚（现金或信用卡）· 携程预订</div>
+            <div class="m-price">押金 €50 / 晚</div>
+          </article>
           <article class="meal reveal">
             <h4>早午餐 · Pancakes Amsterdam</h4>
             <p class="m-meal">荷兰煎饼</p>
@@ -997,8 +1033,8 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
 <footer>
   <div class="container">
     <div class="return-card">
-      <div class="r-title">✈️ 10 月 6 日 22:00 · 巴黎 CDG → 北京</div>
-      <p>飞行约 11 小时 · 时差 -7h · 预计 10 月 7 日北京时间 11:00-12:00 抵达首都机场</p>
+      <div class="r-title">✈️ 10 月 6 日 22:45 · AF0202 巴黎 CDG → 北京</div>
+      <p>飞行约 11 小时 · 时差 -7h · 预计 10 月 7 日 15:55 抵达首都机场 · 值机截止 21:45</p>
     </div>
     <p class="foot-note">欧洲自驾 · 七日五国 · 2026.9.30 — 10.6 · 全程 1,502km · 用脚步和车轮丈量欧洲</p>
   </div>
