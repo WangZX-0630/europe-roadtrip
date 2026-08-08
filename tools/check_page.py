@@ -19,6 +19,7 @@ for sid in ['hero', 'route', 'itinerary', 'culture', 'budget', 'bookings', 'tips
     must(f'<section id="{sid}">', f'<section id="{sid}">' in html)
 must('<footer>', '<footer>' in html)
 must('id="map-canvas"', 'id="map-canvas"' in html)
+must('5 个国家横幅', html.count('article class="c-banner ') == 5)
 
 # 2. 导航锚点可解析
 for m in re.finditer(r'href="#([\w-]+)"', html):
