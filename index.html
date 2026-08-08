@@ -4,7 +4,7 @@
 <script>document.documentElement.className += ' js';</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>欧洲自驾 · 七日五国 — 2026.9.30-10.6</title>
+<title>王宝和刘宝的欧洲自驾之旅 · 七日五国 — 2026.9.30-10.6</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <style>
 :root{
@@ -43,9 +43,17 @@ a{color:var(--blue);text-decoration:none}
 /* 徽标与碎块 */
 .badge{display:inline-block;font-size:12px;font-weight:600;letter-spacing:.04em;padding:4px 12px;border-radius:999px;background:#e8f0fe;color:var(--blue)}
 .chip{display:inline-block;font-size:12px;font-weight:500;padding:3px 10px;border-radius:999px;background:#f0f0f3;color:var(--ink2);margin:2px 3px 2px 0}
-/* 滚动渐入 */
-.js .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1)}
+/* 滚动渐入（苹果风：更长更柔的缓动 + 轻微缩放） */
+.js .reveal{opacity:0;transform:translateY(32px) scale(.985);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)}
 .js .reveal.in{opacity:1;transform:none}
+/* 卡片组内交错渐显（stagger） */
+.js .spot-grid>.reveal:nth-child(2),.js .meal-grid>.reveal:nth-child(2),.js .booking>.reveal:nth-child(2),.js .tips-grid>.reveal:nth-child(2){transition-delay:.07s}
+.js .spot-grid>.reveal:nth-child(3),.js .meal-grid>.reveal:nth-child(3),.js .booking>.reveal:nth-child(3),.js .tips-grid>.reveal:nth-child(3){transition-delay:.14s}
+.js .spot-grid>.reveal:nth-child(4),.js .meal-grid>.reveal:nth-child(4),.js .booking>.reveal:nth-child(4),.js .tips-grid>.reveal:nth-child(4){transition-delay:.21s}
+.js .spot-grid>.reveal:nth-child(5),.js .meal-grid>.reveal:nth-child(5){transition-delay:.28s}
+.js .spot-grid>.reveal:nth-child(6),.js .meal-grid>.reveal:nth-child(6){transition-delay:.35s}
+.js .spot-grid>.reveal:nth-child(7){transition-delay:.42s}
+.js .day.reveal{transform:translateY(44px) scale(.99)}
 /* 按钮 */
 .btn{display:inline-block;background:var(--blue);color:#fff;font-size:15px;font-weight:500;padding:10px 22px;border-radius:980px;transition:background .2s}
 .btn:hover{background:var(--blue2)}
@@ -76,6 +84,17 @@ li.tl .det span{color:var(--ink2);font-size:13px}
 .hero-stats .stat b{display:block;font-size:28px;font-weight:700;color:#fff;letter-spacing:-.01em}
 .hero-stats .stat span{font-size:12.5px;color:#c7c7cc}
 .hero-cta{margin-top:36px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+/* 首屏入场（苹果风：逐层上浮） */
+.js .hero-inner>*{opacity:0;animation:heroUp .9s cubic-bezier(.16,1,.3,1) forwards}
+.js .hero-inner>*:nth-child(1){animation-delay:.1s}
+.js .hero-inner>*:nth-child(2){animation-delay:.22s}
+.js .hero-inner>*:nth-child(3){animation-delay:.34s}
+.js .hero-inner>*:nth-child(4){animation-delay:.5s}
+.js .hero-inner>*:nth-child(5){animation-delay:.62s}
+@keyframes heroUp{from{opacity:0;transform:translateY(34px)}to{opacity:1;transform:none}}
+/* 首屏背景缓慢呼吸（Ken Burns） */
+.hero-bg{animation:bgPan 20s ease-in-out infinite alternate}
+@keyframes bgPan{from{transform:scale(1) translateY(0)}to{transform:scale(1.08) translateY(-12px)}}
 /* 响应式 */
 @media(max-width:768px){
   .nav-links{gap:16px}
@@ -84,18 +103,12 @@ li.tl .det span{color:var(--ink2);font-size:13px}
   li.tl .ty{grid-column:2;padding-top:0}
   #topnav .brand{font-size:15px}
 }
-/* SVG 路线总览图 */
-.route-card{overflow:hidden}
-.route-line{fill:none;stroke:url(#routeGrad);stroke-width:4;stroke-linecap:round;stroke-dasharray:1400;stroke-dashoffset:1400;animation:draw 2.4s cubic-bezier(.4,0,.2,1) forwards}
-.route-line.sub{stroke-width:3;stroke-dasharray:600 14;animation-delay:.4s}
-@keyframes draw{to{stroke-dashoffset:0}}
-.dist{font-size:13px;font-weight:600;fill:#86868b;font-variant-numeric:tabular-nums}
-.city{cursor:pointer}
-.city-dot{fill:#0071e3;stroke:#fff;stroke-width:3;transition:r .2s, fill .2s}
-.city:hover .city-dot{fill:#0077ed}
-.city-name{font-size:15px;font-weight:600;fill:#1d1d1f;text-anchor:middle}
-.city.sub .city-dot{fill:#ff9f0a}
-.route-note{margin-top:16px;font-size:13px;color:var(--ink2);text-align:center}
+/* 地图上的距离标注徽标 */
+.leg-dist{font-size:12px;font-weight:600;color:#6e6e73;background:rgba(255,255,255,.92);border:1px solid rgba(0,0,0,.08);border-radius:999px;padding:2px 8px;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,.1);font-variant-numeric:tabular-nums}
+.leg-dist.sub{color:#b34d00;background:rgba(255,247,230,.95)}
+/* 城市名称标签（永久显示 · 深色胶囊） */
+.leaflet-tooltip.city-label{background:#1d1d1f;color:#fff;border:none;border-radius:999px;padding:3px 10px;font-size:12px;font-weight:600;box-shadow:0 4px 14px rgba(0,0,0,.2)}
+.leaflet-tooltip.city-label:before{display:none}
 /* Task 6 行程板块 Day 1-3 */
 .day-stack{display:flex;flex-direction:column;gap:40px;padding-top:40px}
 .day{background:var(--card);border:1px solid var(--line);border-radius:28px;padding:32px;box-shadow:var(--shadow);scroll-margin-top:80px}
@@ -107,7 +120,7 @@ li.tl .det span{color:var(--ink2);font-size:13px}
 .spot-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-bottom:20px}
 .meal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-bottom:20px}
 .spot{background:#fbfbfd;border:1px solid var(--line);border-radius:var(--radius-sm);overflow:hidden;transition:transform .3s, box-shadow .3s}
-.spot:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+.spot:hover{transform:translateY(-6px) scale(1.015);box-shadow:0 24px 60px rgba(0,0,0,.14)}
 .spot .s-body{padding:14px 16px 16px}
 .spot h4{font-size:16px;font-weight:650;letter-spacing:-.01em}
 .spot .s-tip{font-size:13px;color:var(--ink2);margin-top:6px}
@@ -118,16 +131,35 @@ li.tl .det span{color:var(--ink2);font-size:13px}
 .meal .m-dish{font-size:13px;color:#3b3b40;margin-top:8px}
 .meal .m-price{display:inline-block;margin-top:8px;font-size:12px;font-weight:600;color:#d97706;background:#fef3c7;border-radius:999px;padding:3px 10px}
 @media(max-width:768px){.spot-grid,.meal-grid{grid-template-columns:1fr}}
-/* Task 8 国家风情板块 */
-.country-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;padding-top:40px}
-.country{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:26px;box-shadow:var(--shadow);border-top:4px solid var(--acc,#0071e3);transition:transform .35s, box-shadow .35s}
-.country:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
-.c-flag{font-size:34px;line-height:1}
-.country h3{font-size:19px;font-weight:700;margin:12px 0 8px;letter-spacing:-.01em}
-.c-desc{font-size:14px;color:var(--ink2);margin-bottom:14px}
-.c-list{display:flex;flex-direction:column;gap:6px}
-.c-list span{font-size:13px;color:#3b3b40;background:#f5f5f7;border-radius:10px;padding:7px 12px}
-@media(max-width:768px){.country-grid{grid-template-columns:1fr}}
+/* Task 8 国家风情横幅 */
+.c-banner-stack{display:flex;flex-direction:column;gap:20px;padding-top:40px}
+.c-banner{position:relative;min-height:300px;border-radius:24px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow);background:#1d1d1f;transition:box-shadow .35s}
+.c-banner:hover{box-shadow:var(--shadow-lg)}
+.cb-media{position:absolute;inset:0}
+.cb-img{width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.c-banner:hover .cb-img{transform:scale(1.05)}
+.cb-fallback{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#e8e8ed,#f5f5f7);color:#3b3b40;font-weight:600;opacity:0}
+.cb-media .cb-img[data-failed] + .cb-fallback{opacity:1}
+.cb-shade{position:absolute;inset:0;background:linear-gradient(100deg,rgba(13,13,18,.85) 0%,rgba(13,13,18,.45) 45%,rgba(13,13,18,0) 78%)}
+.cb-body{position:relative;padding:34px 40px;max-width:820px;color:#fff}
+.cb-acc{position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--acc,#0071e3)}
+.cb-head{display:flex;align-items:center;gap:12px}
+.cb-flag{font-size:30px;line-height:1}
+.cb-body h3{font-size:clamp(21px,3vw,27px);font-weight:700;letter-spacing:-.015em;color:#fff}
+.cb-facts{font-size:13px;color:rgba(255,255,255,.72);margin-top:6px}
+.cb-desc{font-size:14.5px;color:rgba(255,255,255,.92);margin-top:10px;line-height:1.7}
+.cb-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.cb-tags span{font-size:12.5px;color:#fff;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:5px 12px;backdrop-filter:blur(6px)}
+/* 横幅交错渐显 */
+.js .c-banner-stack>.reveal:nth-child(2){transition-delay:.08s}
+.js .c-banner-stack>.reveal:nth-child(3){transition-delay:.16s}
+.js .c-banner-stack>.reveal:nth-child(4){transition-delay:.24s}
+.js .c-banner-stack>.reveal:nth-child(5){transition-delay:.32s}
+@media(max-width:768px){
+  .cb-body{padding:24px 20px}
+  .cb-desc{font-size:13.5px}
+  .c-banner{min-height:260px}
+}
 /* Task 9 驾驶数据表 */
 .drive-table{width:100%;border-collapse:collapse;font-size:14px}
 .drive-table th{font-size:12px;color:var(--ink2);font-weight:600;text-align:left;padding:10px 12px;border-bottom:1px solid var(--line)}
@@ -175,7 +207,7 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
 <body>
 <nav id="topnav">
   <div class="nav-inner">
-    <a class="brand" href="#hero">欧洲自驾 · 七日五国</a>
+    <a class="brand" href="#hero">王宝和刘宝的欧洲自驾之旅</a>
     <div class="nav-links">
       <a class="nav-link" href="#route">路线</a>
       <a class="nav-link" href="#itinerary">行程</a>
@@ -211,47 +243,13 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
   <section id="route">
   <div class="section-head reveal">
     <div class="kicker">The Route</div>
-    <h2>整体路线</h2>
-    <p>一次穿越五国的环形自驾——巴黎出发，逆时针驶过比利时、荷兰、德国与卢森堡，最后回到巴黎。</p>
+    <h2>路线与地图</h2>
+    <p>一次穿越五国的环形自驾——巴黎出发，逆时针驶过比利时、荷兰、德国与卢森堡，最后回到巴黎。点击地图标记直达对应行程日。</p>
   </div>
   <div class="container">
-    <div class="card route-card">
-      <svg viewBox="0 0 900 560" role="img" aria-label="欧洲自驾路线图">
-        <defs>
-          <linearGradient id="routeGrad" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0" stop-color="#0071e3"/><stop offset="1" stop-color="#5ac8fa"/>
-          </linearGradient>
-          <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-            <path d="M0,0 L10,5 L0,10 z" fill="#0071e3"/>
-          </marker>
-        </defs>
-        <!-- 分段路线（顺序：巴黎→布鲁塞尔→阿姆斯特丹→风车村(支线)→阿姆斯特丹→科隆→卢森堡→凡尔赛→巴黎） -->
-        <path class="route-line" d="M346.7,407.1 Q440,300 526.7,242.9" />
-        <path class="route-line" d="M526.7,242.9 Q560,160 576.4,118.0" />
-        <path class="route-line" d="M576.4,118.0 L568.4,109.2" marker-end="url(#arrow)"/>
-        <path class="route-line sub" d="M568.4,109.2 L576.4,118.0"/>
-        <path class="route-line" d="M576.4,118.0 Q680,140 761.4,235.8" />
-        <path class="route-line" d="M761.4,235.8 Q730,300 686.9,344.9" />
-        <path class="route-line" d="M686.9,344.9 Q520,400 325.8,411.4" />
-        <path class="route-line" d="M325.8,411.4 Q330,410 346.7,407.1" />
-        <!-- 距离标注 -->
-        <text class="dist" x="420" y="300">312km</text>
-        <text class="dist" x="600" y="160">212km</text>
-        <text class="dist" x="560" y="68">15km</text>
-        <text class="dist" x="690" y="175">261km</text>
-        <text class="dist" x="740" y="305">203km</text>
-        <text class="dist" x="480" y="420">381km</text>
-        <text class="dist" x="318" y="465">23km</text>
-        <!-- 城市节点 -->
-        <a href="#day-1" data-city="巴黎" class="city" transform="translate(346.7,407.1)"><circle r="9" class="city-dot"/><text class="city-name" y="-16">巴黎</text></a>
-        <a href="#day-2" data-city="布鲁塞尔" class="city" transform="translate(526.7,242.9)"><circle r="9" class="city-dot"/><text class="city-name" y="-16">布鲁塞尔</text></a>
-        <a href="#day-3" data-city="阿姆斯特丹" class="city" transform="translate(576.4,118.0)"><circle r="9" class="city-dot"/><text class="city-name" y="-16">阿姆斯特丹</text></a>
-        <a href="#day-3" data-city="风车村" class="city sub" transform="translate(568.4,109.2)"><circle r="6" class="city-dot"/><text class="city-name" y="-14">风车村</text></a>
-        <a href="#day-4" data-city="科隆" class="city" transform="translate(761.4,235.8)"><circle r="9" class="city-dot"/><text class="city-name" y="-16">科隆</text></a>
-        <a href="#day-4" data-city="卢森堡" class="city" transform="translate(686.9,344.9)"><circle r="9" class="city-dot"/><text class="city-name" y="26">卢森堡</text></a>
-        <a href="#day-5" data-city="凡尔赛" class="city" transform="translate(325.8,411.4)"><circle r="7" class="city-dot"/><text class="city-name" y="26">凡尔赛</text></a>
-      </svg>
-      <p class="route-note">▲ 数字为各段自驾里程 · 风车村为阿姆斯特丹当日往返支线 · 全程 1,502km</p>
+    <!-- Leaflet 交互地图（含路线连线、城市标记与各段距离标注） -->
+    <div class="card map-card" style="padding:10px">
+      <div id="map-canvas" style="height:520px;border-radius:16px;overflow:hidden"></div>
     </div>
   </div>
   <!-- Task 9 驾驶数据表 -->
@@ -275,19 +273,6 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
     </div>
   </div>
 </section>
-  <!-- Task 5 填充 Leaflet 地图 -->
-  <section id="map">
-  <div class="section-head reveal">
-    <div class="kicker">Interactive Map</div>
-    <h2>交互地图</h2>
-    <p>点击城市标记，直达对应行程日。</p>
-  </div>
-  <div class="container">
-    <div class="card" style="padding:10px">
-      <div id="map-canvas" style="height:520px;border-radius:16px;overflow:hidden"></div>
-    </div>
-  </div>
-</section>
   <!-- Task 6 填充行程板块 Day 1-3 -->
   <section id="itinerary">
     <div class="section-head reveal">
@@ -303,7 +288,7 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
           <div class="day-meta">
             <div class="day-date">9月30日 · 周三 · 抵达日</div>
             <h3>巴黎初印象 — 铁塔 · 罗浮宫 · 凯旋门 · 蒙马特</h3>
-            <p class="day-tags"><span class="chip">🇫🇷 法国</span><span class="chip">市内约 20km</span><span class="chip">7 景点 + 3 餐</span></p>
+            <p class="day-tags"><span class="chip">🇫🇷 法国</span><span class="chip">🚇 全天地铁出行</span><span class="chip">4 景点 + 3 餐</span></p>
           </div>
         </header>
         <div class="spot-grid">
@@ -314,8 +299,8 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
             </div>
             <div class="s-body">
               <h4>埃菲尔铁塔</h4>
-              <p class="s-tip">清晨人最少，登二层 €18.80；战神广场免费，最佳拍照点在战神广场正对面与特罗卡德罗</p>
-              <span class="s-price">€18.80</span>
+              <p class="s-tip">✅已订 11:00 电梯票登顶层（€36.70/人）· 严格按时入场 · 战神广场免费，最佳拍照点在正对面与特罗卡德罗</p>
+              <span class="s-price">已订 ✓ 11:00 顶层</span>
             </div>
           </article>
           <article class="spot reveal">
@@ -325,8 +310,8 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
             </div>
             <div class="s-body">
               <h4>罗浮宫</h4>
-              <p class="s-tip">精华路线：Carrousel 入口→蒙娜丽莎→维纳斯→胜利女神→拿破仑三世公寓；€17 官网提前预约时段</p>
-              <span class="s-price">€17</span>
+              <p class="s-tip">✅已订 13:15 中文讲解团 2 小时（含门票，¥1,178/2 人）· 路线：蒙娜丽莎→维纳斯→胜利女神→拿破仑三世公寓</p>
+              <span class="s-price">已订 ✓ 13:15 讲解团</span>
             </div>
           </article>
           <article class="spot reveal">
@@ -336,8 +321,8 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
             </div>
             <div class="s-body">
               <h4>凯旋门</h4>
-              <p class="s-tip">登顶层 €13 俯瞰 12 条放射大道；外部拍照也极好</p>
-              <span class="s-price">€13</span>
+              <p class="s-tip">登顶层 €16（周三优惠价，官网可约省排队）俯瞰 12 条放射大道；外部拍照也极好</p>
+              <span class="s-price">€16</span>
             </div>
           </article>
           <article class="spot reveal">
@@ -372,16 +357,16 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
             <span class="m-price">人均 €5.5</span>
           </article>
           <article class="meal reveal">
-            <h4>午餐 · Le Foyot de Tuileries</h4>
-            <p class="m-meal">1890 经典法餐厅</p>
-            <p class="m-dish">焗蜗牛 €14.5 / 油封鸭腿 €22 / 洋葱汤 €11.5</p>
-            <span class="m-price">人均 €45-60 · 需预订</span>
+            <h4>午餐 · 罗浮宫旁简餐</h4>
+            <p class="m-meal">讲解团 15:15 结束后快速解决</p>
+            <p class="m-dish">三明治 / 可颂 + 咖啡 · 两人 €15-20</p>
+            <span class="m-price">€15-20</span>
           </article>
           <article class="meal reveal">
-            <h4>晚餐 · Le Campanule</h4>
-            <p class="m-meal">经典法餐厅</p>
-            <p class="m-dish">牛排 €22 / 法式炖蛋 €16</p>
-            <span class="m-price">人均 €40-55 · 需预订</span>
+            <h4>晚餐 · La Maison Rose（蒙马特）</h4>
+            <p class="m-meal">粉色小屋 · 毕加索同款景致的经典小馆</p>
+            <p class="m-dish">经典法式家常菜 · 2 Rue de l'Abreuvoir</p>
+            <span class="m-price">人均 €35-50 · 建议预订</span>
           </article>
         </div>
         <details class="tl-box">
@@ -392,18 +377,18 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
               <li class="tl"><div class="t">06:00-07:00</div><div class="ty">交通</div><div class="det"><b>入境手续 + 提取行李</b><span>机场内步行 · 法国海关现金 €10000+ 需申报</span></div></li>
               <li class="tl"><div class="t">06:30-07:00</div><div class="ty">租车</div><div class="det"><b>SIXT 柜台取车（奔驰 C 级自动挡）</b><span>门店位于 T1/T2D 到达层，步行约 15min · 携带驾照原件 + 翻译认证件 + 芯片信用卡 · 跨境多国须提前告知门店登记目的地（否则保险可能失效）</span></div></li>
               <li class="tl"><div class="t">08:00-09:00</div><div class="ty">驾车</div><div class="det"><b>CDG → 巴黎市区酒店</b><span>28km / 36min · A1 高速 €4.5 → Périphérique 环线</span></div></li>
-              <li class="tl"><div class="t">09:00-09:30</div><div class="ty">住宿</div><div class="det"><b>入住巴黎格勒内勒埃菲尔铁塔美居酒店</b><span>64 Bd de Grenelle, 75015 · 15:00 后正式入住，行李可先寄存 · 停车 €30-50/晚</span></div></li>
-              <li class="tl"><div class="t">09:30-10:00</div><div class="ty">餐饮</div><div class="det"><b>简单早餐：牛角包 + 咖啡</b><span>或酒店早餐 €15-25</span></div></li>
-              <li class="tl"><div class="t">10:00-11:30</div><div class="ty">景点</div><div class="det"><b>埃菲尔铁塔 + 战神广场</b><span>距酒店约 4km/12min · 清晨人最少，登二层 €18.80，最佳拍照点战神广场正对面 / 特罗卡德罗</span></div></li>
-              <li class="tl"><div class="t">11:30-12:00</div><div class="ty">驾车</div><div class="det"><b>铁塔 → 罗浮宫</b><span>4km / 12min · 停车 Parking Quai Branly €3.10/h</span></div></li>
-              <li class="tl"><div class="t">12:00-13:30</div><div class="ty">餐饮</div><div class="det"><b>午餐 Le Foyot de Tuileries（1890 经典法餐厅）</b><span>焗蜗牛 €14.5 / 油封鸭腿 €22 / 洋葱汤 €11.5 · 人均 €45-60 · 需预订</span></div></li>
-              <li class="tl"><div class="t">13:30-15:30</div><div class="ty">景点</div><div class="det"><b>罗浮宫精华游览</b><span>€17 官网提前预约时段 · 路线：Carrousel 入口→蒙娜丽莎→维纳斯→胜利女神→拿破仑三世公寓</span></div></li>
-              <li class="tl"><div class="t">15:30-16:00</div><div class="ty">驾车</div><div class="det"><b>罗浮宫 → 凯旋门</b><span>4km / 10min · 停车 Parking La Bourdonnais €3.10/h</span></div></li>
-              <li class="tl"><div class="t">16:00-17:00</div><div class="ty">景点</div><div class="det"><b>凯旋门 + 星形广场</b><span>登顶层 €13 俯瞰 12 条放射大道</span></div></li>
-              <li class="tl"><div class="t">17:00-17:30</div><div class="ty">驾车</div><div class="det"><b>凯旋门 → 蒙马特</b><span>5km / 12min · 蒙马特为行人区，停 Parking Garibaldi €2.5/h 步行上山 15min</span></div></li>
-              <li class="tl"><div class="t">17:30-19:00</div><div class="ty">景点</div><div class="det"><b>圣心大教堂 + 蒙马特艺术广场 + 小丘广场</b><span>步行上山 15min · 免费，日落时分最美</span></div></li>
-              <li class="tl"><div class="t">19:30-21:00</div><div class="ty">餐饮</div><div class="det"><b>晚餐 Le Campanule 经典法餐厅</b><span>牛排 €22 / 法式炖蛋 €16 · 人均 €40-55 · 需预订</span></div></li>
-              <li class="tl"><div class="t">21:00-22:00</div><div class="ty">驾车</div><div class="det"><b>蒙马特 → 酒店</b><span>5-8km / 20-30min · 晚上市区交通较好</span></div></li>
+              <li class="tl"><div class="t">09:00-09:30</div><div class="ty">住宿</div><div class="det"><b>入住巴黎格勒内勒埃菲尔铁塔美居酒店</b><span>64 Bd de Grenelle, 75015 · 15:00 后正式入住，行李可先寄存 · 酒店车库 €25/晚（先到先得）· ⭐车入库后全天地铁出行</span></div></li>
+              <li class="tl"><div class="t">09:30-10:30</div><div class="ty">餐饮</div><div class="det"><b>早餐 + 步行至战神广场</b><span>牛角包 + 咖啡 · 酒店距铁塔步行约 15min · 先拍战神广场全景（最佳机位）</span></div></li>
+              <li class="tl"><div class="t">11:00-12:30</div><div class="ty">景点</div><div class="det"><b>埃菲尔铁塔顶层</b><span>✅已订 11:00 电梯票（顶层 €36.70/人 ×2）· 严格按时入场 · 顶层俯瞰全城</span></div></li>
+              <li class="tl"><div class="t">12:30-13:15</div><div class="ty">地铁</div><div class="det"><b>铁塔 → 罗浮宫 Carrousel 入口报到</b><span>地铁 6 号线→1 号线约 25min · 车停酒店不动</span></div></li>
+              <li class="tl"><div class="t">13:15-15:15</div><div class="ty">景点</div><div class="det"><b>罗浮宫中文讲解团 2 小时（含门票）</b><span>✅已订 13:15 场（¥1,178/2 人 · 携程订单）· 路线：蒙娜丽莎→维纳斯→胜利女神→拿破仑三世公寓</span></div></li>
+              <li class="tl"><div class="t">15:15-15:45</div><div class="ty">餐饮</div><div class="det"><b>快速午餐</b><span>罗浮宫旁简餐（三明治/可颂）· 两人 €15-20</span></div></li>
+              <li class="tl"><div class="t">15:45-16:15</div><div class="ty">地铁</div><div class="det"><b>罗浮宫 → 凯旋门</b><span>地铁 1 号线约 15min · 直达 Charles de Gaulle-Étoile</span></div></li>
+              <li class="tl"><div class="t">16:15-17:15</div><div class="ty">景点</div><div class="det"><b>凯旋门 + 星形广场</b><span>登顶层 €16（周三优惠价，官网可约省排队）俯瞰 12 条放射大道</span></div></li>
+              <li class="tl"><div class="t">17:15-17:45</div><div class="ty">地铁</div><div class="det"><b>凯旋门 → 蒙马特</b><span>地铁 2 号线至 Anvers · 约 20min · 蒙马特为行人区</span></div></li>
+              <li class="tl"><div class="t">17:45-19:15</div><div class="ty">景点</div><div class="det"><b>圣心大教堂 + 蒙马特艺术广场 + 小丘广场</b><span>步行上山 15min · 免费 · 10 月日落约 19:07，正好赶上日落时分</span></div></li>
+              <li class="tl"><div class="t">19:30-21:00</div><div class="ty">餐饮</div><div class="det"><b>晚餐 La Maison Rose（蒙马特粉色小屋）</b><span>经典法式家常菜 · 2 Rue de l'Abreuvoir · 人均 €35-50 · 建议预订</span></div></li>
+              <li class="tl"><div class="t">21:00-22:00</div><div class="ty">地铁</div><div class="det"><b>蒙马特 → 酒店</b><span>地铁 12→6 号线约 30min · 晚上市区交通较好</span></div></li>
             </ul>
           </div>
         </details>
@@ -414,20 +399,20 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
           <div class="day-no">Day 2</div>
           <div class="day-meta">
             <div class="day-date">10月1日 · 周四 · 巴黎 → 布鲁塞尔</div>
-            <h3>巴黎深度游 → 布鲁塞尔 — 奥赛 · 圣母院 · 大广场 · 撒尿小童</h3>
+            <h3>巴黎 → 布鲁塞尔 — 圣母院 · 圣礼拜堂 · 大广场 · 撒尿小童</h3>
             <p class="day-tags"><span class="chip">🇫🇷 法国 → 🇧🇪 比利时</span><span class="chip">跨境 · 312km</span><span class="chip">4 景点 + 3 餐</span></p>
           </div>
         </header>
         <div class="spot-grid">
           <article class="spot reveal">
             <div class="photo-wrap">
-              <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Musee%20d%27Orsay%20and%20Pont%20Royal%2C%20North-West%20view%20140402%201.jpg?width=1200" alt="奥赛博物馆" loading="lazy" onerror="this.setAttribute('data-failed','')">
-              <div class="photo-fallback">奥赛博物馆</div>
+              <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Mont%20des%20Arts%2C%20Bruselas%2C%20B%C3%A9lgica%2C%202021-12-14%2C%20DD%2013-15%20HDR.jpg?width=1200" alt="艺术山 Mont des Arts" loading="lazy" onerror="this.setAttribute('data-failed','')">
+              <div class="photo-fallback">艺术山 Mont des Arts</div>
             </div>
             <div class="s-body">
-              <h4>奥赛博物馆</h4>
-              <p class="s-tip">莫奈《干草堆》、梵高《自画像》</p>
-              <span class="s-price">€16</span>
+              <h4>艺术山 Mont des Arts 俯瞰</h4>
+              <p class="s-tip">大广场旁高台 · 布鲁塞尔全景最佳观赏点 · 皇家美术馆外观（不进馆）</p>
+              <span class="s-price">免费</span>
             </div>
           </article>
           <article class="spot reveal">
@@ -437,8 +422,8 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
             </div>
             <div class="s-body">
               <h4>西岱岛 · 巴黎圣母院外观 + 圣礼拜堂</h4>
-              <p class="s-tip">圣母院 2024年12月重开，圣礼拜堂彩窗绝美</p>
-              <span class="s-price">€11</span>
+              <p class="s-tip">圣母院 2024年12月重开 · 圣礼拜堂 €22 官网限时预约（10:30 档，含古监狱联票 €30）</p>
+              <span class="s-price">€22 · 需预约</span>
             </div>
           </article>
           <article class="spot reveal">
@@ -448,8 +433,8 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
             </div>
             <div class="s-body">
               <h4>布鲁塞尔大广场</h4>
-              <p class="s-tip">UNESCO 世界遗产、欧洲最美广场，市政厅钟楼登顶</p>
-              <span class="s-price">€6</span>
+              <p class="s-tip">UNESCO 世界遗产、欧洲最美广场 · 市政厅外观（钟楼登顶仅周末 15:00/17:00 英文导览团 €25，周四无团）</p>
+              <span class="s-price">免费</span>
             </div>
           </article>
           <article class="spot reveal">
@@ -472,35 +457,35 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
             <div class="m-price">¥1,952 / 晚</div>
           </article>
           <article class="meal reveal">
-            <h4>午餐 · Maison Dandoy</h4>
-            <p class="m-meal">比利时薯条</p>
-            <p class="m-dish">薯条 €8</p>
-            <span class="m-price">人均 €14（两店合计）</span>
+            <h4>午餐 · Laon 高速服务区</h4>
+            <p class="m-meal">312km 途中 · 13:00 休息站</p>
+            <p class="m-dish">服务区简餐（三明治/可颂+咖啡）· 两人 €15-20</p>
+            <span class="m-price">€15-20</span>
           </article>
           <article class="meal reveal">
-            <h4>午餐 · Neuve Garage</h4>
-            <p class="m-meal">比利时华夫饼</p>
-            <p class="m-dish">华夫饼 €6</p>
-            <span class="m-price">人均 €14（两店合计）</span>
+            <h4>下午茶 · Friterie Tabora + Maison Renardy</h4>
+            <p class="m-meal">到达布鲁塞尔后 · 薯条 + 列日华夫</p>
+            <p class="m-dish">现炸薯条配美乃滋（Rue de Tabora 2）· 列日华夫 €4-6（Rue d'Arenberg 2）</p>
+            <span class="m-price">€8-12</span>
           </article>
           <article class="meal reveal">
-            <h4>晚餐 · Maison Antoine</h4>
-            <p class="m-meal">1870 比利时餐厅</p>
-            <p class="m-dish">啤酒炖牛肉 €18 / 鸭胸 €24</p>
-            <span class="m-price">人均 €45-55 · 需预订 · Rue Antoine Dansaert 38</span>
+            <h4>晚餐 · Brasserie Surréaliste</h4>
+            <p class="m-meal">Dansaert 街区啤酒馆（原计划餐厅系虚构）</p>
+            <p class="m-dish">比利时炖菜 / 生蚝吧 / 精酿啤酒 · Pl. du Nouveau Marché aux Grains 23</p>
+            <span class="m-price">人均 €25-45 · 建议预订</span>
           </article>
         </div>
         <details class="tl-box">
           <summary>展开完整时刻表（7 项）</summary>
           <div class="tl-list">
             <ul class="tl">
-              <li class="tl"><div class="t">08:30-10:00</div><div class="ty">景点</div><div class="det"><b>奥赛博物馆印象派艺术殿堂</b><span>距酒店约2km/7min · €16 官网提前预约 · 莫奈《干草堆》、梵高《自画像》· 停车 €3.5/h</span></div></li>
-              <li class="tl"><div class="t">10:30-11:30</div><div class="ty">景点</div><div class="det"><b>巴黎圣母院（外观）+ 圣礼拜堂</b><span>步行可达 · 圣母院 2024年12月重开 · 圣礼拜堂 €11 彩窗绝美</span></div></li>
-              <li class="tl"><div class="t">12:00-15:45</div><div class="ty">驾车</div><div class="det"><b>驾车前往布鲁塞尔</b><span>312km / 3h45min · A1→A2/E19 · 法国段 €10-12 · 13:30 在 Laon 服务区休息</span></div></li>
-              <li class="tl"><div class="t">16:30-17:30</div><div class="ty">餐饮</div><div class="det"><b>午餐：比利时薯条 + 华夫饼</b><span>步行可达 · Maison Dandoy 薯条 €8、Neuve Garage 华夫饼 €6</span></div></li>
-              <li class="tl"><div class="t">17:30-19:00</div><div class="ty">景点</div><div class="det"><b>布鲁塞尔大广场（Grand Place）+ 市政厅</b><span>步行3min · UNESCO 世界遗产，欧洲最美广场 · 市政厅钟楼 €6</span></div></li>
-              <li class="tl"><div class="t">19:00-19:30</div><div class="ty">景点</div><div class="det"><b>撒尿小童 + 圣于贝尔拱廊街</b><span>步行10min · 拱廊街买巧克力 Neuhaus 和啤酒 Chimay</span></div></li>
-              <li class="tl"><div class="t">21:30-23:00</div><div class="ty">餐饮</div><div class="det"><b>晚餐：Maison Antoine 比利时餐厅（1870年）</b><span>步行15min · 啤酒炖牛肉 €18、鸭胸 €24 · 人均 €45-55 · 需预订 · Rue Antoine Dansaert 38</span></div></li>
+              <li class="tl"><div class="t">08:00-09:00</div><div class="ty">餐饮</div><div class="det"><b>酒店早餐（含早）+ 退房寄存行李</b><span>Mercure 含 10/1 双人早餐 · 今天 312km 长途，吃饱再走</span></div></li>
+              <li class="tl"><div class="t">09:00-10:30</div><div class="ty">景点</div><div class="det"><b>圣礼拜堂 + 巴黎圣母院（外观）</b><span>地铁 6→RER B 约 25min · 圣礼拜堂 €22 官网限时预约（09:00 首档，光线最好）· 圣母院 2024年12月重开 · 不进博物馆，节奏从容</span></div></li>
+              <li class="tl"><div class="t">10:30-11:00</div><div class="ty">交通</div><div class="det"><b>地铁回酒店取车</b><span>约 25min</span></div></li>
+              <li class="tl"><div class="t">11:00-14:45</div><div class="ty">驾车</div><div class="det"><b>驾车前往布鲁塞尔</b><span>312km / 3h45min · A1→A2/E19 · 法国段 €10-12 · 13:00 Laon 服务区午餐</span></div></li>
+              <li class="tl"><div class="t">15:00-16:00</div><div class="ty">住宿</div><div class="det"><b>入住 Hilton + 大广场初逛</b><span>酒店步行 5min · 车入库 €22-25/天（先到先得）· ⭐之后全程步行</span></div></li>
+              <li class="tl"><div class="t">16:00-18:00</div><div class="ty">景点</div><div class="det"><b>圣于贝尔拱廊街 + 撒尿小童 + 艺术山俯瞰</b><span>步行圈 10-15min · 拱廊街买 Neuhaus 巧克力、Chimay 啤酒 · 艺术山（Mont des Arts）俯瞰全城</span></div></li>
+              <li class="tl"><div class="t">18:30-20:30</div><div class="ty">餐饮</div><div class="det"><b>晚餐 Brasserie Surréaliste + 大广场夜景</b><span>Dansaert 街区 · 比利时炖菜 / 生蚝吧 / 精酿 · 人均 €25-45 · 餐后大广场灯光夜景（UNESCO 世界遗产）</span></div></li>
             </ul>
           </div>
         </details>
@@ -534,8 +519,8 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
             </div>
             <div class="s-body">
               <h4>阿姆斯特丹运河带日落游船</h4>
-              <p class="s-tip">日落时分的运河 = 完美荷兰体验，码头 Centraal Station 附近</p>
-              <span class="s-price">€15 含中文导览</span>
+              <p class="s-tip">日落时分的运河 = 完美荷兰体验 · Centraal 对面码头 · 每 30 分钟一班（选 18:30 班次）</p>
+              <span class="s-price">€14.50-15.50 含中文</span>
             </div>
           </article>
           <article class="spot reveal">
@@ -550,6 +535,10 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
             </div>
           </article>
           <article class="spot reveal">
+            <div class="photo-wrap">
+              <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Keizersgracht%20Jul%202019.jpg?width=1200" alt="九街 De Negen Straatjes" loading="lazy" onerror="this.setAttribute('data-failed','')">
+              <div class="photo-fallback">九街 De Negen Straatjes</div>
+            </div>
             <div class="s-body">
               <h4>九街 De Negen Straatjes 夜游</h4>
               <p class="s-tip">最文艺街区：精品店、古董店、小酒馆，夜晚灯光下运河倒映</p>
@@ -574,10 +563,10 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
             <p class="m-dish">Stroopwafel €3 / 薯条 €5</p>
           </article>
           <article class="meal reveal">
-            <h4>晚餐 · De Eendracht</h4>
-            <p class="m-meal">1919 最古老餐厅之一</p>
-            <p class="m-dish">荷兰炖牛肉 €18 / 鲱鱼三明治 €7 / 奶酪拼盘 €18</p>
-            <span class="m-price">人均 €35-50 · Egelantiersgracht 63 · 需预订</span>
+            <h4>晚餐 · Moeders</h4>
+            <p class="m-meal">荷兰家常菜（原计划餐厅系虚构）</p>
+            <p class="m-dish">荷兰炖菜 / 传统家常料理 · Rozengracht 251</p>
+            <span class="m-price">人均 €35-45 · 建议预订</span>
           </article>
         </div>
         <details class="tl-box">
@@ -587,14 +576,14 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
               <li class="tl"><div class="t">07:30-08:30</div><div class="ty">餐饮</div><div class="det"><b>比利时特色早餐</b><span>华夫饼 + 巧克力 + 薯条 · 今天开车 212km 前往阿姆斯特丹</span></div></li>
               <li class="tl"><div class="t">10:30-13:30</div><div class="ty">驾车</div><div class="det"><b>驾车前往阿姆斯特丹</b><span>212km / 2h45min · A1/E19→A2 经 Antwerp · 荷兰高速免费 · 经 Antwerp 可快速看 Cathedral €4</span></div></li>
               <li class="tl"><div class="t">13:30-14:00</div><div class="ty">餐饮</div><div class="det"><b>快速午餐：Albert Cuyp Market 街头小吃</b><span>步行可达 · Stroopwafel 热华夫饼 €3、薯条 €5 · 市场位于 Dam 广场附近</span></div></li>
-              <li class="tl"><div class="t">14:00-14:30</div><div class="ty">住宿</div><div class="det"><b>办理入住/寄存行李</b><span>⚠阿姆斯特丹停车极贵 €5-7/h · 建议选带停车场酒店 €40-60/晚</span></div></li>
-              <li class="tl"><div class="t">14:30-15:00</div><div class="ty">驾车</div><div class="det"><b>前往 Zaanse Schans 风车村</b><span>15km / 20min · N508/A7 北向 · 免费停车场 P1/P2</span></div></li>
-              <li class="tl"><div class="t">15:00-17:30</div><div class="ty">景点</div><div class="det"><b>Zaanse Schans 荷兰风车村深度游览</b><span>免费入场 · 17 座历史风车（磨坊 €4-5/座）· 木鞋制作工坊免费 · 奶酪工坊（Edam cheese €8）· 木鞋行走体验 €7 · 金萨德风车（De Gouwe）€4 登塔俯瞰 · 拍照绝佳：风车+运河+蓝屋经典荷兰画面</span></div></li>
-              <li class="tl"><div class="t">17:30-18:00</div><div class="ty">驾车</div><div class="det"><b>驾车返回阿姆斯特丹市区</b><span>15km / 20min · 沿原路返回 · 17:30 出发可赶上日落时分的运河</span></div></li>
-              <li class="tl"><div class="t">18:00-19:00</div><div class="ty">景点</div><div class="det"><b>阿姆斯特丹运河带日落游船</b><span>步行5min · €15（含中文导览）· 日落时分的运河 + 风车村记忆 = 完美荷兰体验 · 码头：Centraal Station 附近</span></div></li>
-              <li class="tl"><div class="t">19:00-19:30</div><div class="ty">景点</div><div class="det"><b>Dam Square 水坝广场 + 王宫外观</b><span>步行3min · 免费 · 荷兰王宫（原市政厅）+ 国家纪念碑 · 广场傍晚灯光亮起后拍照效果好</span></div></li>
-              <li class="tl"><div class="t">19:30-21:00</div><div class="ty">餐饮</div><div class="det"><b>晚餐：De Eendracht（1919 年最古老餐厅之一）</b><span>骑车10min · 荷兰炖牛肉 €18、鲱鱼三明治 €7、奶酪拼盘 €18 · 人均 €35-50 · 地址：Egelantiersgracht 63 · 需预订</span></div></li>
-              <li class="tl"><div class="t">21:00-22:30</div><div class="ty">景点</div><div class="det"><b>De Negen Straatjes（九街）精品区夜游</b><span>步行10min · 阿姆斯特丹最文艺的街区：精品店、古董店、小酒馆 · 夜晚灯光下的运河倒映很美</span></div></li>
+              <li class="tl"><div class="t">14:00-14:30</div><div class="ty">住宿</div><div class="det"><b>办理入住/寄存行李</b><span>NH Zuid 车库 €17.50/晚（先到先得，不可预订）· ⭐车入库后市区公交出行：电车 5 号线 15min 到 Museumplein</span></div></li>
+              <li class="tl"><div class="t">14:30-15:00</div><div class="ty">驾车</div><div class="det"><b>前往 Zaanse Schans 风车村</b><span>NH Zuid → 风车村约 23km / 25-30min · N508/A7 北向 · 风车村停车场 €11-15/天</span></div></li>
+              <li class="tl"><div class="t">15:00-17:30</div><div class="ty">景点</div><div class="det"><b>Zaanse Schans 荷兰风车村深度游览</b><span>免费入场 · 17 座历史风车（磨坊 €4-6/座）· 木鞋制作工坊免费 · 奶酪工坊（Edam cheese €8）· 金萨德风车（De Gouwe）€4 登塔俯瞰 · 16:45 前撤，赶 18:30 游船</span></div></li>
+              <li class="tl"><div class="t">17:30-18:00</div><div class="ty">驾车</div><div class="det"><b>风车村 → NH 酒店</b><span>23km / 25min · 车入库后电车 5 号线 15min 进市中心</span></div></li>
+              <li class="tl"><div class="t">18:30-19:30</div><div class="ty">景点</div><div class="det"><b>阿姆斯特丹运河带日落游船</b><span>€14.50-15.50（含中文手机导览）· 日落时分的运河 + 风车村记忆 = 完美荷兰体验 · 码头：Centraal 对面 Prins Hendrikkade 35A · 每 30 分钟一班</span></div></li>
+              <li class="tl"><div class="t">19:30-20:00</div><div class="ty">景点</div><div class="det"><b>Dam Square 水坝广场 + 王宫外观</b><span>步行3min · 免费 · 荷兰王宫（原市政厅）+ 国家纪念碑 · 广场傍晚灯光亮起后拍照效果好</span></div></li>
+              <li class="tl"><div class="t">20:00-21:00</div><div class="ty">景点</div><div class="det"><b>De Negen Straatjes（九街）精品区夜游</b><span>步行10min · 阿姆斯特丹最文艺的街区：精品店、古董店、小酒馆 · 夜晚灯光下的运河倒映很美</span></div></li>
+              <li class="tl"><div class="t">21:15-22:15</div><div class="ty">餐饮</div><div class="det"><b>晚餐：Moeders（荷兰家常菜）</b><span>Rozengracht 251 · 游完九街顺路 · 人均 €35-45 · 建议预订 · 22:30 电车 52 号线回 NH 酒店</span></div></li>
             </ul>
           </div>
         </details>
@@ -617,11 +606,15 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
             </div>
             <div class="s-body">
               <h4>Rijksmuseum 国家博物馆</h4>
-              <p class="s-tip">必看：伦勃朗《夜巡》（世界最大画作 11×4m）、维米尔《代尔夫特风景》</p>
-              <span class="s-price">€20 提前预约</span>
+              <p class="s-tip">必看：伦勃朗《夜巡》（世界最大画作 11×4m）、维米尔《代尔夫特风景》· 全年 09:00-17:00 开门，强制分时预约</p>
+              <span class="s-price">€25 · 分时预约</span>
             </div>
           </article>
           <article class="spot reveal">
+            <div class="photo-wrap">
+              <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Rijksmuseum%20from%20Museumplein%202523.jpg?width=1200" alt="博物馆广场" loading="lazy" onerror="this.setAttribute('data-failed','')">
+              <div class="photo-fallback">博物馆广场 Museumplein</div>
+            </div>
             <div class="s-body">
               <h4>博物馆广场 + 梵高博物馆外观</h4>
               <p class="s-tip">梵高博物馆外观拍照 · 海牙市政厅（Stadhuis）在广场旁</p>
@@ -635,11 +628,15 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
             </div>
             <div class="s-body">
               <h4>安妮之家（Anne Frank House）</h4>
-              <p class="s-tip">《安妮日记》藏身地，非常感人</p>
-              <span class="s-price">€16 提前 2-3 个月预约</span>
+              <p class="s-tip">《安妮日记》藏身地，非常感人 · 仅官网售票 · 每周二放 6 周后的票（10/3 的票 8/18 开抢）</p>
+              <span class="s-price">€16.50 · 8/18 开抢</span>
             </div>
           </article>
           <article class="spot reveal">
+            <div class="photo-wrap">
+              <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Amsterdam%20-%20Singel%20-%20Bloemenmarkt%20-%20Flowermarket%20-%20View%20SE.jpg?width=1200" alt="Bloemenmarkt 花市" loading="lazy" onerror="this.setAttribute('data-failed','')">
+              <div class="photo-fallback">Bloemenmarkt 花市</div>
+            </div>
             <div class="s-body">
               <h4>Bloemenmarkt 花市</h4>
               <p class="s-tip">全球唯一浮动花卉市场，郁金香球茎 €3-5 伴手礼</p>
@@ -653,8 +650,8 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
             </div>
             <div class="s-body">
               <h4>科隆大教堂</h4>
-              <p class="s-tip">UNESCO 世界遗产、哥特式巅峰、世界第三大教堂</p>
-              <span class="s-price">€7 登塔 394 级台阶</span>
+              <p class="s-tip">UNESCO 世界遗产、哥特式巅峰 · 2026/7/1 起游客入内收费 €12 · 10/3 德国统一日或减免</p>
+              <span class="s-price">入内 €12 + 登塔 €8</span>
             </div>
           </article>
           <article class="spot reveal">
@@ -672,44 +669,43 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
         <div class="meal-grid">
           <article class="meal stay"><h4>🏨 卢森堡万豪阿尔法酒店</h4>
             <div class="m-en">Luxembourg Marriott Hotel Alfa</div>
-            <div class="m-meal">16 Pl. de la Gare, 1616 Luxembourg · 10/3 16:00 起入住 → 10/4 12:00 前退房</div>
-            <div class="m-dish">中央火车站旁 · 押金 €50/晚（现金或信用卡）· 携程预订</div>
+            <div class="m-meal">16 Pl. de la Gare, 1616 Luxembourg · 10/3 16:00 起可入住（预计 21:30 到店）→ 10/4 12:00 前退房</div>
+            <div class="m-dish">中央火车站旁 · 押金 €50/晚（现金或信用卡）· 携程预订 · ⚠停车信息矛盾，需提前书面确认</div>
             <div class="m-price">押金 €50 / 晚</div>
           </article>
           <article class="meal reveal">
-            <h4>早午餐 · Pancakes Amsterdam</h4>
-            <p class="m-meal">荷兰煎饼</p>
-            <p class="m-dish">荷兰煎饼比可丽饼厚，甜咸都有</p>
-            <span class="m-price">€8-10</span>
+            <h4>早餐 · NH 酒店自助（含早）</h4>
+            <p class="m-meal">08:30 前用餐，09:00 出发</p>
+            <p class="m-dish">含 10/3 双人自助早餐 · 今天 479km 长途，务必吃饱</p>
           </article>
           <article class="meal reveal">
             <h4>午餐 · Früh Kölsch Brewery</h4>
             <p class="m-meal">科隆老城啤酒屋</p>
-            <p class="m-dish">啤酒 €4/小杯、科隆香肠 €6、Reibekuchen 土豆饼 €5</p>
+            <p class="m-dish">啤酒 €2.6-3.5/小杯、科隆香肠 €6、Reibekuchen 土豆饼 €5</p>
             <span class="m-price">人均 €10</span>
           </article>
           <article class="meal reveal">
-            <h4>晚餐 · Villa Le Rosey</h4>
-            <p class="m-meal">米其林法餐厅</p>
-            <p class="m-dish">鹅肝 €35 / 松露 €45</p>
-            <span class="m-price">人均 €80-120 · 需预订 · 预算有限选 Bons Vivants €35-45</span>
+            <h4>晚餐 · Brasserie Guillaume</h4>
+            <p class="m-meal">卢森堡老城小酒馆（原计划餐厅系虚构）</p>
+            <p class="m-dish">法式/卢森堡家常菜 · 老城步行区</p>
+            <span class="m-price">人均 €35-45 · 升级可选米其林一星 Clairefontaine</span>
           </article>
         </div>
         <details class="tl-box">
           <summary>展开完整时刻表（11 项）</summary>
           <div class="tl-list">
             <ul class="tl">
-              <li class="tl"><div class="t">07:00-08:30</div><div class="ty">景点</div><div class="det"><b>Rijksmuseum 国家博物馆精华游览</b><span>距酒店约 2km/7min · €20（官网提前预约！）· 必看：伦勃朗《夜巡》（世界最大画作 11×4m）、维米尔《代尔夫特风景》、荷兰黄金时代藏品 · 停车 Parking Museumplein €3.5/h</span></div></li>
-              <li class="tl"><div class="t">08:30-09:00</div><div class="ty">景点</div><div class="det"><b>博物馆广场 + 梵高博物馆外观</b><span>步行3min · 免费 · 梵高博物馆外观拍照 · 海牙市政厅（Stadhuis）在广场旁</span></div></li>
-              <li class="tl"><div class="t">09:00-10:30</div><div class="ty">景点</div><div class="det"><b>安妮之家（Anne Frank House）</b><span>驾车 6km/15min · €16（提前 2-3 个月官网预约！）· 《安妮日记》藏身地，非常感人 · 停车 Parking Spui €3/h</span></div></li>
-              <li class="tl"><div class="t">10:30-11:00</div><div class="ty">餐饮</div><div class="det"><b>早餐/早午餐：荷兰煎饼 Pancake</b><span>步行10min · Pancakes Amsterdam €8-10 · 荷兰煎饼比可丽饼厚，甜咸口味都有</span></div></li>
-              <li class="tl"><div class="t">11:00-11:30</div><div class="ty">景点</div><div class="det"><b>Bloemenmarkt 花市 + 老教堂外观</b><span>步行5min · 全球唯一浮动花卉市场 · 买郁金香球茎 €3-5 作伴手礼</span></div></li>
-              <li class="tl"><div class="t">11:30-14:45</div><div class="ty">驾车</div><div class="det"><b>驾车前往科隆（德国）</b><span>261km / 3h15min · A2 经 Utrecht→Düsseldorf→Cologne · 德国高速免费（不限速但安全驾驶！）· 13:00 在 Düsseldorf 服务区休息</span></div></li>
-              <li class="tl"><div class="t">14:45-16:00</div><div class="ty">景点</div><div class="det"><b>科隆大教堂（Kölner Dom）- UNESCO 世界遗产</b><span>距酒店约 1km · 哥特式巅峰，世界第三大教堂 · 外观免费 · 登塔 €7（394 级台阶）· 停车 Parking Dom €2.50/h</span></div></li>
-              <li class="tl"><div class="t">16:00-16:45</div><div class="ty">餐饮</div><div class="det"><b>午餐：科隆特色香肠 + Kölsch 啤酒</b><span>步行5min · Früh Kölsch Brewery 约 €10/位 · 啤酒 €4/小杯 · 科隆香肠 €6、Reibekuchen 土豆饼 €5</span></div></li>
+              <li class="tl"><div class="t">07:30-08:30</div><div class="ty">餐饮</div><div class="det"><b>NH 酒店自助早餐（含早）</b><span>08:30 前用餐 · 今天 479km 长途，务必吃饱</span></div></li>
+              <li class="tl"><div class="t">09:00-10:00</div><div class="ty">景点</div><div class="det"><b>安妮之家（Anne Frank House）</b><span>€16.50 官网分时票（8/18 10:00 荷兰时间=北京 16:00 开抢！）· 《安妮日记》藏身地 · 10/3 周六 09:00-22:00</span></div></li>
+              <li class="tl"><div class="t">10:00-10:15</div><div class="ty">景点</div><div class="det"><b>博物馆广场 + 梵高博物馆外观</b><span>步行3min · 免费 · 梵高博物馆外观拍照</span></div></li>
+              <li class="tl"><div class="t">10:15-11:45</div><div class="ty">景点</div><div class="det"><b>Rijksmuseum 国家博物馆精华游览</b><span>€25 官网分时票（10:15 档）· 必看：伦勃朗《夜巡》、维米尔《代尔夫特风景》· 全年 09:00-17:00</span></div></li>
+              <li class="tl"><div class="t">11:45-12:15</div><div class="ty">景点</div><div class="det"><b>Bloemenmarkt 花市</b><span>顺路 · 全球唯一浮动花卉市场 · 郁金香球茎 €3-5 作伴手礼</span></div></li>
+              <li class="tl"><div class="t">12:15-15:00</div><div class="ty">驾车</div><div class="det"><b>驾车前往科隆（德国）</b><span>261km / 2h45min · A2 经 Utrecht→Düsseldorf · 德国高速免费 · 13:30 服务区午餐</span></div></li>
+              <li class="tl"><div class="t">15:00-16:00</div><div class="ty">景点</div><div class="det"><b>科隆大教堂（Kölner Dom）- UNESCO 世界遗产</b><span>入内 €12（2026/7/1 起新收）+ 登塔 €8（533 级）· 10/3 统一日或减免 · 停车 Parking Dom €2.50/h</span></div></li>
+              <li class="tl"><div class="t">16:00-16:45</div><div class="ty">餐饮</div><div class="det"><b>午餐：科隆香肠 + Kölsch 啤酒</b><span>步行5min · Früh Kölsch Brewery 约 €10/位 · 啤酒 €2.6-3.5/小杯 · 科隆香肠 €6、土豆饼 €5</span></div></li>
               <li class="tl"><div class="t">16:45-17:15</div><div class="ty">景点</div><div class="det"><b>霍亨索伦桥（爱情锁桥）+ 莱茵河畔</b><span>步行10min · 桥上挂满爱情锁 · 莱茵河畔散步看科隆全景</span></div></li>
-              <li class="tl"><div class="t">17:15-19:45</div><div class="ty">驾车</div><div class="det"><b>驾车前往卢森堡市</b><span>203km / 2h30min · A1/E41 经 Trier · 沿途秋季风景从平原渐入山区 · 途经 Trier 可看 Roman Amphitheatre €5</span></div></li>
-              <li class="tl"><div class="t">20:00-21:30</div><div class="ty">餐饮</div><div class="det"><b>晚餐：Villa Le Rosey 米其林法餐厅</b><span>步行10min · 鹅肝 €35、松露 €45 · 人均 €80-120 · 需预订！预算有限选 Bons Vivants €35-45/人</span></div></li>
+              <li class="tl"><div class="t">17:15-19:45</div><div class="ty">驾车</div><div class="det"><b>驾车前往卢森堡市</b><span>203km / 2h30min · A1/E41 经 Trier · 沿途秋季风景从平原渐入山区</span></div></li>
+              <li class="tl"><div class="t">20:00-21:30</div><div class="ty">餐饮</div><div class="det"><b>晚餐：Brasserie Guillaume（老城）</b><span>人均 €35-45 · 升级可选米其林一星 Clairefontaine · 21:45 入住万豪（车站对面，免费电车/步行 15min）</span></div></li>
             </ul>
           </div>
         </details>
@@ -720,7 +716,7 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
           <div class="day-no">Day 5</div>
           <div class="day-meta">
             <div class="day-date">10月4日 · 周日 · 卢森堡 → 凡尔赛 → 巴黎</div>
-            <h3>卢森堡 → 凡尔赛 → 巴黎 — 大峡谷 · 凡尔赛宫 · 百年食堂</h3>
+            <h3>卢森堡 → 凡尔赛 → 巴黎 — 大峡谷 · 凡尔赛宫 · 花园晚餐</h3>
             <p class="day-tags"><span class="chip">🇱🇺 卢森堡 → 🇫🇷 法国</span><span class="chip">跨境 + 国内 · 404km</span><span class="chip">4 景点 + 3 餐</span></p>
           </div>
         </header>
@@ -732,11 +728,15 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
             </div>
             <div class="s-body">
               <h4>佩特罗斯大峡谷 Bock Casemates + Grund</h4>
-              <p class="s-tip">UNESCO 世界遗产，Grund 欧洲最美峡谷：彩色建筑 + Alzette 河</p>
-              <span class="s-price">€7 地道约 1h</span>
+              <p class="s-tip">UNESCO 世界遗产，Grund 欧洲最美峡谷：彩色建筑 + Alzette 河 · 10 月 10:00 才开门</p>
+              <span class="s-price">€10 左右</span>
             </div>
           </article>
           <article class="spot reveal">
+            <div class="photo-wrap">
+              <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Luxembourg%2C%20Vieille%20ville%2004-2021.jpg?width=1200" alt="卢森堡老城" loading="lazy" onerror="this.setAttribute('data-failed','')">
+              <div class="photo-fallback">卢森堡老城</div>
+            </div>
             <div class="s-body">
               <h4>卢森堡老城</h4>
               <p class="s-tip">王宫 + 大剧院 + 亚当桥 + Calvarieberg 最佳全景俯瞰点</p>
@@ -750,8 +750,8 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
             </div>
             <div class="s-body">
               <h4>凡尔赛宫</h4>
-              <p class="s-tip">镜厅 73 米 17 面拱形镜、国王寝宫、法式花园</p>
-              <span class="s-price">€20 提前预约</span>
+              <p class="s-tip">✅已订 16:00 通票（宫殿+花园+庄园，€28/人）· 10 月 18:30 闭宫、17:00 最后入场 · 迟到超 1h 失效</p>
+              <span class="s-price">已订 ✓ 16:00 通票</span>
             </div>
           </article>
         </div>
@@ -769,30 +769,30 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
             <span class="m-price">€14</span>
           </article>
           <article class="meal reveal">
-            <h4>午餐 · 凡尔赛镇 La Maison Rose / Le Grand Véfour</h4>
-            <p class="m-meal">凡尔赛镇午餐（二选一）</p>
-            <p class="m-dish">La Maison Rose 粉色小屋 €18 / Le Grand Véfour €25-35</p>
-            <span class="m-price">€18-35 · 停车 Parking Place d'Armes €2.50/h</span>
+            <h4>午餐 · 高速服务区</h4>
+            <p class="m-meal">381km 长途途中解决（原计划餐厅系虚构）</p>
+            <p class="m-dish">Metz / Reims 服务区简餐 · 两人 €15-25</p>
+            <span class="m-price">€15-25</span>
           </article>
           <article class="meal reveal">
-            <h4>晚餐 · Bouillon Chartier</h4>
-            <p class="m-meal">百年食堂（1896）· 复古金色装修</p>
-            <p class="m-dish">焗蜗牛 €8 / 油封鸭腿 €12 / 煎蛋卷 €9</p>
-            <span class="m-price">人均 €20-30 · Rue du Faubourg Saint-Denis 18</span>
+            <h4>晚餐 · La Flottille / La Petite Venise</h4>
+            <p class="m-meal">凡尔赛宫花园内湖畔餐厅</p>
+            <p class="m-dish">花园湖畔法餐 · 简餐 €15-25 / 正餐 €20-35</p>
+            <span class="m-price">人均 €20-35 · 无需预订</span>
           </article>
         </div>
         <details class="tl-box">
           <summary>展开完整时刻表（8 项）</summary>
           <div class="tl-list">
             <ul class="tl">
-              <li class="tl"><div class="t">08:30-10:00</div><div class="ty">景点</div><div class="det"><b>Bock Casemates + Grund 大峡谷</b><span>步行5min · UNESCO 世界遗产 · 地道 €7 约 1h · Grund 欧洲最美峡谷，彩色建筑 + Alzette 河</span></div></li>
-              <li class="tl"><div class="t">10:00-11:00</div><div class="ty">景点</div><div class="det"><b>王宫 + 大剧院 + 亚当桥 + Calvarieberg 俯瞰</b><span>步行可达 · 王宫免费外观 · Calvarieberg 最佳全景俯瞰点</span></div></li>
+              <li class="tl"><div class="t">08:30-09:45</div><div class="ty">景点</div><div class="det"><b>卢森堡老城漫步</b><span>万豪步行 15min 或免费电车 2 站 · 王宫外观 + 大剧院 + 阿道夫桥 + Calvarieberg 俯瞰 · 免费</span></div></li>
+              <li class="tl"><div class="t">10:00-11:00</div><div class="ty">景点</div><div class="det"><b>Bock Casemates 地道 + Grund 大峡谷</b><span>10:00 开门 · €10 左右（仅收卡）· 每 15 分钟一批 · 限时 45min · Grund 欧洲最美峡谷</span></div></li>
               <li class="tl"><div class="t">11:00-11:30</div><div class="ty">餐饮</div><div class="det"><b>快速午餐：Judd mat Gaardebounen</b><span>步行5min · 卢森堡特色：烟熏猪肉配蚕豆 €14 · 或简餐 €10-15</span></div></li>
-              <li class="tl"><div class="t">11:30-16:00</div><div class="ty">驾车</div><div class="det"><b>驾车前往凡尔赛（最长一段！）</b><span>381km / 4h30min · A31→A4 经 Metz→Reims · €15-18 高速费 · 13:00 Metz 休息 30min、14:30 Reims 服务区</span></div></li>
-              <li class="tl"><div class="t">16:00-17:00</div><div class="ty">餐饮</div><div class="det"><b>午餐：La Maison Rose 或 Le Grand Véfour</b><span>粉色小屋 €18、Le Grand Véfour €25-35 · 停车 Parking Place d'Armes €2.50/h</span></div></li>
-              <li class="tl"><div class="t">17:00-19:00</div><div class="ty">景点</div><div class="det"><b>Château de Versailles + 镜厅 + 花园</b><span>步行5min · €20（官网提前预约！）· 镜厅 73 米 17 面拱形镜、国王寝宫、法式花园 · 停车 Parking Château €3/h</span></div></li>
-              <li class="tl"><div class="t">19:30-20:30</div><div class="ty">驾车</div><div class="det"><b>驾车返回巴黎市区</b><span>23km / 36min · N104→A13 或 N186→Périphérique · €4-5</span></div></li>
-              <li class="tl"><div class="t">20:30-22:00</div><div class="ty">餐饮</div><div class="det"><b>晚餐：Bouillon Chartier 百年食堂（1896 年）</b><span>焗蜗牛 €8、油封鸭腿 €12、煎蛋卷 €9 · 人均 €20-30 · 复古金色装修 · 地址：Rue du Faubourg Saint-Denis 18</span></div></li>
+              <li class="tl"><div class="t">11:30-16:00</div><div class="ty">驾车</div><div class="det"><b>驾车前往凡尔赛（最长一段！）</b><span>381km / 4h30min · A31→A4 经 Metz→Reims · €15-18 高速费 · 13:00 Metz、14:30 Reims 服务区午餐</span></div></li>
+              <li class="tl"><div class="t">16:00-18:30</div><div class="ty">景点</div><div class="det"><b>Château de Versailles + 镜厅 + 花园</b><span>✅已订 16:00 通票 €28/人（携程 · 宫殿+花园+庄园）· 18:30 闭宫、17:00 最后入场 · 迟到超 1h 失效 · 镜厅 73 米 17 面拱形镜</span></div></li>
+              <li class="tl"><div class="t">18:45-19:45</div><div class="ty">餐饮</div><div class="det"><b>晚餐：La Flottille / La Petite Venise（宫花园内）</b><span>花园湖畔法餐 · 简餐 €15-25 / 正餐 €20-35 · 无需预订</span></div></li>
+              <li class="tl"><div class="t">19:45-20:30</div><div class="ty">驾车</div><div class="det"><b>驾车返回巴黎 Ibis</b><span>23km / 36min · N104→A13 或 N186→Périphérique · €4-5</span></div></li>
+              <li class="tl"><div class="t">21:00</div><div class="ty">住宿</div><div class="det"><b>入住 Ibis Cambronne</b><span>2 Rue Cambronne, 75015 · 车库 €30/晚 · ⭐之后全天地铁出行（6 号线 Cambronne 站 150m）</span></div></li>
             </ul>
           </div>
         </details>
@@ -804,7 +804,7 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
           <div class="day-meta">
             <div class="day-date">10月5日 · 周一 · 巴黎深度游（最后一天）</div>
             <h3>巴黎深度游最后一天 — 圣礼拜堂 · 塞纳河游船 · 铁塔日落夜景</h3>
-            <p class="day-tags"><span class="chip">🇫🇷 法国</span><span class="chip">巴黎市区 · 约 20km</span><span class="chip">6 景点 + 3 餐</span></p>
+            <p class="day-tags"><span class="chip">🇫🇷 法国</span><span class="chip">🚇 全天地铁出行</span><span class="chip">6 景点 + 2 餐</span></p>
           </div>
         </header>
         <div class="spot-grid">
@@ -815,11 +815,15 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
             </div>
             <div class="s-body">
               <h4>圣礼拜堂 Sainte-Chapelle</h4>
-              <p class="s-tip">15 扇 15 米高哥特彩窗，世界最美</p>
-              <span class="s-price">€11</span>
+              <p class="s-tip">15 扇 15 米高哥特彩窗，世界最美 · 官网限时预约（09:00 档）</p>
+              <span class="s-price">€22 · 需预约</span>
             </div>
           </article>
           <article class="spot reveal">
+            <div class="photo-wrap">
+              <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Place%20des%20Vosges%2C%20Paris%2C%20porte%20du%20n%C2%B0%2013.JPG?width=1200" alt="玛莱区 · 孚日广场" loading="lazy" onerror="this.setAttribute('data-failed','')">
+              <div class="photo-fallback">玛莱区 · 孚日广场</div>
+            </div>
             <div class="s-body">
               <h4>玛莱区 + 孚日广场</h4>
               <p class="s-tip">巴黎最优雅广场（16 世纪），LVMH 基金会免费，精品店 + 古着店</p>
@@ -833,11 +837,15 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
             </div>
             <div class="s-body">
               <h4>塞纳河游船 Bateaux Mouches</h4>
-              <p class="s-tip">途径圣母院→奥赛→铁塔→罗浮宫→大皇宫→亚历山大三世桥</p>
-              <span class="s-price">€15 含中文导览 1.5h</span>
+              <p class="s-tip">途径圣母院→奥赛→铁塔→罗浮宫→大皇宫→亚历山大三世桥 · 选卢浮宫码头船（别选铁塔码头，绕路）</p>
+              <span class="s-price">€16-17 · 开放票</span>
             </div>
           </article>
           <article class="spot reveal">
+            <div class="photo-wrap">
+              <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Galerie%20Lafayette%20Haussmann%20Dome.jpg?width=1200" alt="老佛爷穹顶" loading="lazy" onerror="this.setAttribute('data-failed','')">
+              <div class="photo-fallback">老佛爷穹顶</div>
+            </div>
             <div class="s-body">
               <h4>老佛爷 / 春天百货</h4>
               <p class="s-tip">香水 Chanel/Dior、化妆品 L'Occitane、Ladurée 马卡龙</p>
@@ -850,12 +858,16 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
               <div class="photo-fallback">杜乐丽花园</div>
             </div>
             <div class="s-body">
-              <h4>杜乐丽花园 + 亚历山大三世桥 + 荣军院</h4>
-              <p class="s-tip">绿顶凉亭喷泉，巴黎最华丽的桥，金色圆顶拿破仑长眠地</p>
-              <span class="s-price">€11.5</span>
+              <h4>杜乐丽花园 + 亚历山大三世桥</h4>
+              <p class="s-tip">绿顶凉亭喷泉、巴黎最华丽的桥 · 荣军院降级为可选（体力够再去，€17 现场可买）</p>
+              <span class="s-price">免费</span>
             </div>
           </article>
           <article class="spot reveal">
+            <div class="photo-wrap">
+              <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Tour%20eiffel%20at%20sunrise%20from%20the%20trocadero.jpg?width=1200" alt="特罗卡德罗 · 铁塔" loading="lazy" onerror="this.setAttribute('data-failed','')">
+              <div class="photo-fallback">特罗卡德罗 · 铁塔</div>
+            </div>
             <div class="s-body">
               <h4>特罗卡德罗铁塔日落夜景</h4>
               <p class="s-tip">日落约 19:00，整点闪烁 5 分钟，特罗卡德罗正对铁塔 = 最佳拍照点</p>
@@ -881,14 +893,14 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
           <summary>展开完整时刻表（8 项）</summary>
           <div class="tl-list">
             <ul class="tl">
-              <li class="tl"><div class="t">09:00-09:45</div><div class="ty">景点</div><div class="det"><b>Sainte-Chapelle 圣礼拜堂</b><span>距酒店约 3km/10min · €11 · 15 扇 15 米高哥特彩窗，世界最美 · 停车 Parking Île de la Cité</span></div></li>
-              <li class="tl"><div class="t">10:00-11:30</div><div class="ty">景点</div><div class="det"><b>玛莱区漫步 + Place des Vosges 孚日广场</b><span>步行15min · 巴黎最优雅广场（16 世纪）· LVMH 基金会免费 · 精品店 + 古着店</span></div></li>
+              <li class="tl"><div class="t">09:00-09:45</div><div class="ty">景点</div><div class="det"><b>Sainte-Chapelle 圣礼拜堂</b><span>地铁 6→RER B 约 25min · €22（官网限时预约 09:00 档）· 15 扇 15 米高哥特彩窗，世界最美</span></div></li>
+              <li class="tl"><div class="t">10:00-11:30</div><div class="ty">景点</div><div class="det"><b>玛莱区漫步 + Place des Vosges 孚日广场</b><span>地铁 Cité→St-Paul 约 10min · 巴黎最优雅广场（16 世纪）· LVMH 基金会免费 · 精品店 + 古着店</span></div></li>
               <li class="tl"><div class="t">11:30-12:30</div><div class="ty">餐饮</div><div class="det"><b>午餐：L'As du Fallafel 或 Breizh Café</b><span>步行3min · 法拉费 €7（排队名店）或顶级可丽饼 €25（布列塔尼风格）</span></div></li>
-              <li class="tl"><div class="t">13:00-15:00</div><div class="ty">景点</div><div class="det"><b>Bateaux Mouches 塞纳河游船 1.5 小时</b><span>步行5min · €15（含中文导览）· 途径：圣母院→奥赛→铁塔→罗浮宫→大皇宫→亚历山大三世桥</span></div></li>
-              <li class="tl"><div class="t">15:00-16:30</div><div class="ty">景点</div><div class="det"><b>最后购物：老佛爷/春天百货</b><span>步行10min · 香水（Chanel/Dior）、化妆品（L'Occitane）、Ladurée 马卡龙、法国家居</span></div></li>
-              <li class="tl"><div class="t">16:30-17:30</div><div class="ty">景点</div><div class="det"><b>杜乐丽花园 + 亚历山大三世桥 + 荣军院</b><span>步行可达 · 绿顶凉亭喷泉、巴黎最华丽的桥 · 金色圆顶拿破仑长眠地 €11.5</span></div></li>
-              <li class="tl"><div class="t">18:30-19:30</div><div class="ty">景点</div><div class="det"><b>埃菲尔铁塔日落 + 夜景</b><span>步行3min · 日落约 19:00 · 整点闪烁 5 分钟 · 特罗卡德罗正对铁塔 = 最佳拍照点 · 停车 Parking Trocadéro €3.10/h</span></div></li>
-              <li class="tl"><div class="t">19:30-22:00</div><div class="ty">餐饮</div><div class="det"><b>告别晚餐：Les Ombres 屋顶餐厅</b><span>步行3min · 俯瞰铁塔夜景 · 海鲜拼盘 €35、鹅肝 €28 · 人均 €60-90 · 需预订！告别法国的美食盛宴</span></div></li>
+              <li class="tl"><div class="t">13:00-15:00</div><div class="ty">景点</div><div class="det"><b>Bateaux Mouches 塞纳河游船 1.5 小时</b><span>卢浮宫码头（距午餐地步行 15min）· €16-17 开放票 · 途径：圣母院→奥赛→铁塔→罗浮宫→大皇宫→亚历山大三世桥</span></div></li>
+              <li class="tl"><div class="t">15:00-16:30</div><div class="ty">景点</div><div class="det"><b>最后购物：老佛爷/春天百货</b><span>地铁 7 号线约 15min · 香水（Chanel/Dior）、化妆品（L'Occitane）、Ladurée 马卡龙、法国家居</span></div></li>
+              <li class="tl"><div class="t">16:30-17:30</div><div class="ty">景点</div><div class="det"><b>杜乐丽花园 + 亚历山大三世桥</b><span>地铁 7→1 号线约 15min · 绿顶凉亭喷泉、巴黎最华丽的桥 · 荣军院降级为可选（€17 现场可买，体力够才去）</span></div></li>
+              <li class="tl"><div class="t">18:30-19:30</div><div class="ty">景点</div><div class="det"><b>埃菲尔铁塔日落 + 夜景</b><span>地铁 6 号线直达 Trocadéro · 日落约 19:00 · 整点闪烁 5 分钟 · 特罗卡德罗正对铁塔 = 最佳拍照点</span></div></li>
+              <li class="tl"><div class="t">19:30-22:00</div><div class="ty">餐饮</div><div class="det"><b>告别晚餐：Les Ombres 屋顶餐厅</b><span>Quai Branly 博物馆屋顶 · 过桥步行 10min · 俯瞰铁塔夜景 · 海鲜拼盘 €35、鹅肝 €28 · 人均 €60-90 · 提前 1-2 周预订 ☎+33 1 47 53 68 00</span></div></li>
             </ul>
           </div>
         </details>
@@ -899,22 +911,30 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
           <div class="day-no">Day 7</div>
           <div class="day-meta">
             <div class="day-date">10月6日 · 周二 · 巴黎 → CDG → 北京</div>
-            <h3>巴黎 → CDG → 北京 — 奥斯曼大街 · 蓬皮杜 · Angelina 告别巴黎</h3>
-            <p class="day-tags"><span class="chip">🇫🇷 法国 → 🇨🇳 中国</span><span class="chip">返程 · 27km</span><span class="chip">2 景点 + 1 餐</span></p>
+            <h3>巴黎 → CDG → 北京 — 左岸晨光 · Chartier 午餐 · Angelina 告别巴黎</h3>
+            <p class="day-tags"><span class="chip">🇫🇷 法国 → 🇨🇳 中国</span><span class="chip">返程 · 27km</span><span class="chip">2 景点 + 2 餐</span></p>
           </div>
         </header>
         <div class="spot-grid">
           <article class="spot reveal">
+            <div class="photo-wrap">
+              <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Caf%C3%A9%20de%20Flore%2C%20172%20boulevard%20Saint-Germain%2C%20Paris%206e.jpg?width=1200" alt="花神咖啡馆" loading="lazy" onerror="this.setAttribute('data-failed','')">
+              <div class="photo-fallback">花神咖啡馆</div>
+            </div>
             <div class="s-body">
-              <h4>奥斯曼大街漫步</h4>
-              <p class="s-tip">花神咖啡馆 Café de Flore €5，萨特波伏娃据点</p>
+              <h4>圣日耳曼左岸漫步 · 花神咖啡馆</h4>
+              <p class="s-tip">花神 Café de Flore（6 区 172 Bd Saint-Germain，不在 Haussmann）· 萨特波伏娃据点 · 开业 1887</p>
               <span class="s-price">免费</span>
             </div>
           </article>
           <article class="spot reveal">
+            <div class="photo-wrap">
+              <img class="photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Galerie%20Lafayette%20Haussmann%20Dome.jpg?width=1200" alt="老佛爷穹顶" loading="lazy" onerror="this.setAttribute('data-failed','')">
+              <div class="photo-fallback">老佛爷穹顶</div>
+            </div>
             <div class="s-body">
-              <h4>蓬皮杜艺术中心外观</h4>
-              <p class="s-tip">彩色管道外露，内部 €14</p>
+              <h4>老佛爷最后购物</h4>
+              <p class="s-tip">香水 Chanel/Dior、Ladurée 马卡龙、法国家居 · 距 Chartier 午餐步行 10min</p>
               <span class="s-price">免费</span>
             </div>
           </article>
@@ -923,14 +943,20 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
           <article class="meal flight"><h4>✈️ AF0202 · 法航经济舱</h4>
             <div class="m-en">10/6（周二）22:45 巴黎戴高乐 T2E → 10/7 15:55 北京首都 T2</div>
             <div class="m-meal">巴黎 (CDG) 2E 航站楼 → 北京 (PEK) 2 号航站楼</div>
-            <div class="m-dish">值机截止 21:45 · 行李 1×23kg · 20:30 前 SIXT 门店还车（CDG T1/T2D，满油还）</div>
+            <div class="m-dish">值机截止 21:45 · 行李 1×23kg · 19:30-20:00 SIXT 门店还车（CDG T1/T2D，满油还 · 提前还车先与 SIXT 确认租期）</div>
             <div class="m-price">已出票 ✓</div>
+          </article>
+          <article class="meal reveal">
+            <h4>午餐 · Bouillon Chartier（9 区总店）</h4>
+            <p class="m-meal">百年食堂（1896）· 11:30 后人少</p>
+            <p class="m-dish">焗蜗牛 €8 / 油封鸭腿 €12 / 煎蛋卷 €9 · 7 Rue du Faubourg Montmartre</p>
+            <span class="m-price">人均 €20-30 · 排队入座</span>
           </article>
           <article class="meal reveal">
             <h4>最后一餐 · Angelina</h4>
             <p class="m-meal">法式甜点</p>
-            <p class="m-dish">热巧克力 €8 巴黎最浓稠、圣多诺黑 €10</p>
-            <span class="m-price">€8-10</span>
+            <p class="m-dish">热巧克力 €9.90 巴黎最浓稠、圣多诺黑 €10</p>
+            <span class="m-price">€10-20</span>
           </article>
           <article class="meal reveal" style="background:linear-gradient(135deg,#e8f0fe,#f5f5f7);border:2px solid var(--blue);text-align:center;padding:20px 16px">
             <h4 style="font-size:17px;color:var(--blue)">✈️ 22:45 CDG → 北京 · 飞行约 11 小时 · 时差 -7h · 预计 10 月 7 日 15:55 抵达</h4>
@@ -940,13 +966,13 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
           <summary>展开完整时刻表（8 项）</summary>
           <div class="tl-list">
             <ul class="tl">
-              <li class="tl"><div class="t">08:00-09:00</div><div class="ty">餐饮</div><div class="det"><b>酒店早餐 + 退房</b><span>行李可寄存酒店前台</span></div></li>
-              <li class="tl"><div class="t">09:00-10:00</div><div class="ty">景点</div><div class="det"><b>Boulevard Haussmann 漫步</b><span>步行/驾车 5min · 花神咖啡馆 Café de Flore €5，萨特波伏娃据点</span></div></li>
-              <li class="tl"><div class="t">10:00-11:30</div><div class="ty">景点</div><div class="det"><b>蓬皮杜艺术中心外观 或 最后纪念品</b><span>步行10min · 蓬皮杜外观免费（彩色管道外露）· 内部 €14</span></div></li>
-              <li class="tl"><div class="t">11:30-12:30</div><div class="ty">餐饮</div><div class="det"><b>最后一餐：Angelina 法式甜点</b><span>热巧克力 €8（巴黎最浓稠）、圣多诺黑 €10 · 最后一次品尝法式甜点</span></div></li>
-              <li class="tl"><div class="t">13:00-14:30</div><div class="ty">驾车</div><div class="det"><b>驾车返回戴高乐机场</b><span>27km / 36min · A1 €4.5 · ⚠预留 1.5h 防堵车 · 22:45 航班建议 19:00 前到</span></div></li>
-              <li class="tl"><div class="t">15:00-20:00</div><div class="ty">交通</div><div class="det"><b>机场休闲 + 免税购物 + 候机</b><span>T2 有 Dior/LVMH 免税店 · 21:45 值机截止</span></div></li>
-              <li class="tl"><div class="t">20:00-20:30</div><div class="ty">租车</div><div class="det"><b>SIXT 门店还车（CDG T1/T2D）</b><span>满油还，保留还车单据 · 门店 06:00-23:59 营业</span></div></li>
+              <li class="tl"><div class="t">08:00-09:30</div><div class="ty">餐饮</div><div class="det"><b>酒店早餐 + 退房 → 花神咖啡馆（左岸）</b><span>行李寄存前台 · 6 区 172 Bd Saint-Germain · 地铁 6 号线 Cambronne 出发 · 萨特波伏娃据点</span></div></li>
+              <li class="tl"><div class="t">09:45-11:00</div><div class="ty">景点</div><div class="det"><b>圣日耳曼左岸漫步（不逛馆）</b><span>圣叙尔皮斯教堂 + 书店街 + 拉丁区 · 蓬皮杜已闭馆至 2030 · 上午轻松漫步，为下午购物留力</span></div></li>
+              <li class="tl"><div class="t">11:45-13:30</div><div class="ty">餐饮</div><div class="det"><b>Angelina 甜点 → 午餐 Bouillon Chartier（9 区总店）</b><span>1 区 226 Rue de Rivoli 热巧克力 €9.90 · 7 Rue du Faubourg Montmartre 焗蜗牛 €8/油封鸭腿 €12 · 人均 €20-30</span></div></li>
+              <li class="tl"><div class="t">13:45-16:30</div><div class="ty">景点</div><div class="det"><b>老佛爷最后购物（可选）→ 回酒店取行李</b><span>距 Chartier 步行 10min · 香水、马卡龙、法国家居 · 地铁约 25min 回 Ibis</span></div></li>
+              <li class="tl"><div class="t">17:00-18:30</div><div class="ty">驾车</div><div class="det"><b>驾车前往戴高乐机场</b><span>27km / 36min · A1 €4.5 · ⚠预留 1.5h 防堵车</span></div></li>
+              <li class="tl"><div class="t">19:30-20:00</div><div class="ty">租车</div><div class="det"><b>SIXT 门店还车（CDG T1/T2D）</b><span>满油还，保留还车单据 · 门店 06:00-23:59 营业 · 提前还车先与 SIXT 确认</span></div></li>
+              <li class="tl"><div class="t">20:00-21:45</div><div class="ty">交通</div><div class="det"><b>机场免税购物 + 候机</b><span>T2 有 Dior/LVMH 免税店 · 21:45 值机截止</span></div></li>
               <li class="tl"><div class="t">22:45</div><div class="ty">航班</div><div class="det"><b>AF0202 起飞返回北京</b><span>飞行约 11 小时 · 时差 -7h · 预计 10 月 7 日 15:55 抵达首都机场</span></div></li>
             </ul>
           </div>
@@ -997,33 +1023,34 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
     <div class="section-head reveal">
       <div class="kicker">Budget</div>
       <h2>预算参考</h2>
-      <p>人均 €1,540–2,300（约 ¥12,000–18,500，不含国际机票）</p>
+      <p>人均 €1,715–2,395（约 ¥13,300–18,600，不含国际机票）</p>
     </div>
     <div class="container budget-grid">
       <article class="budget-item reveal"><div class="b-name">租车 · 7 天 SUV</div><div class="b-amt">€200–300<small>/人</small></div><div class="b-note">已订 SIXT 奔驰 C 级 ¥2,888（两人）· 全险 · 限 1,750km</div></article>
       <article class="budget-item reveal"><div class="b-name">燃油 · 1,502km</div><div class="b-amt">€100–130<small>/人</small></div><div class="b-note">按 8L/100km × €1.8/L 估算</div></article>
       <article class="budget-item reveal"><div class="b-name">过路费</div><div class="b-amt">€20–25<small>/人</small></div><div class="b-note">仅法国段收费，荷/德高速免费</div></article>
-      <article class="budget-item reveal"><div class="b-name">停车 · 6 天</div><div class="b-amt">€50–75<small>/人</small></div><div class="b-note">市区 €2.5–5/h · 风车村 P1/P2 免费</div></article>
+      <article class="budget-item reveal"><div class="b-name">停车 · 6 天</div><div class="b-amt">€105–170<small>/人</small></div><div class="b-note">已查证酒店停车：Mercure €25 + Hilton €22-25 + NH €17.5 + 万豪 €20-44 + Ibis 2晚 €50-60 + 市区景点停车</div></article>
       <article class="budget-item reveal"><div class="b-name">酒店 · 6 晚四星</div><div class="b-amt">€600–900<small>/人</small></div><div class="b-note">€200–300/晚 · 阿姆斯特丹选带停车场</div></article>
-      <article class="budget-item reveal"><div class="b-name">餐饮 · 7 天</div><div class="b-amt">€400–550<small>/人</small></div><div class="b-note">法餐 + 当地小吃，含 2 顿米其林体验</div></article>
-      <article class="budget-item reveal"><div class="b-name">景点门票</div><div class="b-amt">€170–220<small>/人</small></div><div class="b-note">含罗浮宫、凡尔赛、博物馆等全部预约票</div></article>
-      <article class="budget-item total"><div class="b-name">每人总计（不含机票）</div><div class="b-amt">€1,540–2,300<small>≈ ¥12,000–18,500</small></div><div class="b-note">7 天 6 晚 · 五国 · 含全部住宿与餐食 · 往返机票已订 ¥18,229/人（另计）</div></article>
+      <article class="budget-item reveal"><div class="b-name">餐饮 · 7 天</div><div class="b-amt">€400–550<small>/人</small></div><div class="b-note">法餐 + 当地小吃 · 含屋顶 Les Ombres 告别晚宴</div></article>
+      <article class="budget-item reveal"><div class="b-name">景点门票</div><div class="b-amt">€290–320<small>/人</small></div><div class="b-note">已订：铁塔顶层 €36.7 + 罗浮宫讲解团 ≈€76 + 凡尔赛通票 €28 · 未订估算：圣礼拜堂 ×2、Rijksmuseum、安妮之家、凯旋门、科隆、游船等</div></article>
+      <article class="budget-item total"><div class="b-name">每人总计（不含机票）</div><div class="b-amt">€1,715–2,395<small>≈ ¥13,300–18,600</small></div><div class="b-note">7 天 6 晚 · 五国 · 含全部住宿与餐食 · 门票含已订实际价 · 往返机票已订 ¥18,229/人（另计）</div></article>
     </div>
   </section>
   <section id="bookings">
     <div class="section-head reveal">
       <div class="kicker">Bookings</div>
       <h2>出发前 · 必预订清单</h2>
-      <p>热门景点必须提前预约时段，7 项缺一不可</p>
+      <p>热门景点必须提前预约时段 · ⚠ 安妮之家 8/18 开抢，先注册账号</p>
     </div>
     <div class="container booking-list">
-      <div class="booking reveal"><span class="b-n">01</span><div><b>租车</b><p>提前 1 个月 · Hertz / Sixt · 中型 SUV + 全险</p></div></div>
-      <div class="booking reveal"><span class="b-n">02</span><div><b>梵高博物馆</b><p>提前 2-3 个月官网 · €20</p></div></div>
-      <div class="booking reveal"><span class="b-n">03</span><div><b>安妮之家</b><p>提前 2-3 个月官网 · €16</p></div></div>
-      <div class="booking reveal"><span class="b-n">04</span><div><b>罗浮宫</b><p>提前 2-4 周官网预约时段 · €17</p></div></div>
-      <div class="booking reveal"><span class="b-n">05</span><div><b>凡尔赛宫</b><p>提前 2-4 周官网 · €20</p></div></div>
-      <div class="booking reveal"><span class="b-n">06</span><div><b>Rijksmuseum</b><p>提前 1-2 周官网 · €20 · ⭐ 新增</p></div></div>
-      <div class="booking reveal"><span class="b-n">07</span><div><b>热门餐厅</b><p>Le Foyot / Les Ombres / Maison Antoine 提前 1-2 周</p></div></div>
+      <div class="booking reveal"><span class="b-n">01</span><div><b>安妮之家 10/3</b><p>8/18（周二）10:00 荷兰时间 = 北京 16:00 官网开抢 · €16.50 · 仅官网售票，2-3 分钟售罄</p></div></div>
+      <div class="booking reveal"><span class="b-n">02</span><div><b>埃菲尔铁塔 9/30 11:00</b><p>✅已订 · 顶层电梯 €36.70/人 ×2（€73.40）· 严格按时入场</p></div></div>
+      <div class="booking reveal"><span class="b-n">03</span><div><b>罗浮宫 9/30 13:15</b><p>✅已订 · 中文讲解团 2H 含门票 ¥1,178/2 人（携程）· 9/27 前可免费取消</p></div></div>
+      <div class="booking reveal"><span class="b-n">04</span><div><b>圣礼拜堂 10/1 09:00 + 10/5 09:00</b><p>€22 · 限时预约 · 09:00 首档光线最好（奥赛已从行程移除）</p></div></div>
+      <div class="booking reveal"><span class="b-n">05</span><div><b>凡尔赛宫 10/4 16:00</b><p>✅已订 · Passeport 通票 €28/人 ×2（携程）· 17:00 最后入场、18:30 闭宫</p></div></div>
+      <div class="booking reveal"><span class="b-n">06</span><div><b>Rijksmuseum 10/3</b><p>€25 · 强制分时 · 8/18 抢安妮之家时顺手订 10:15 档</p></div></div>
+      <div class="booking reveal"><span class="b-n">07</span><div><b>餐厅预订</b><p>Les Ombres ☎+33 1 47 53 68 00（提前 1-2 周）· Breizh ☎+33 1 42 72 13 77 · Moeders · Café Marly</p></div></div>
+      <div class="booking reveal"><span class="b-n">08</span><div><b>行前确认</b><p>风车村入场费 €17.50（2026 春季起，待确认）· 卢森堡万豪停车 · 科隆 10/3 统一日减免 · SIXT 提前还车</p></div></div>
     </div>
   </section>
   <section id="tips">
@@ -1055,43 +1082,79 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
 (function(){
+  // 风车村、凡尔赛与阿姆斯特丹/巴黎极近，不在路线图上单列（行程详情中保留）
   var cityData = [
     {name:'巴黎',       lat:48.8566, lng:2.3522,  day:1},
     {name:'布鲁塞尔',   lat:50.8503, lng:4.3517,  day:2},
     {name:'阿姆斯特丹', lat:52.3676, lng:4.9041,  day:3},
-    {name:'风车村',     lat:52.4740, lng:4.8160,  day:3, sub:true},
     {name:'科隆',       lat:50.9375, lng:6.9603,  day:4},
     {name:'卢森堡市',   lat:49.6116, lng:6.1319,  day:4},
-    {name:'凡尔赛',     lat:48.8049, lng:2.1204,  day:5},
     {name:'巴黎(返程)', lat:48.8566, lng:2.3522,  day:6}
   ];
   function boot(){
-    if (typeof L === 'undefined') {          // 离线降级：隐藏板块
-      var sec = document.getElementById('map');
+    if (typeof L === 'undefined') {          // 离线降级：隐藏地图卡片
+      var sec = document.querySelector('.map-card');
       if (sec) sec.style.display = 'none';
       return;
     }
     var map = L.map('map-canvas', {scrollWheelZoom:false}).setView([50.8, 4.5], 7);
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 18,
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    // 浅色极简底图（非地形图 · 苹果风）
+    L.tileLayer('https://basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
     }).addTo(map);
-    var line = cityData.filter(function(c){return !c.sub;}).map(function(c){return [c.lat, c.lng];});
-    L.polyline(line, {color:'#0071e3', weight:4, opacity:.85, dashArray:'2 10'}).addTo(map);
-    if (cityData[2] && cityData[3]) {
-      L.polyline([[cityData[2].lat,cityData[2].lng],[cityData[3].lat,cityData[3].lng]],
-        {color:'#ff9f0a', weight:3, dashArray:'4 6'}).addTo(map);
-    }
+    // 实际自驾路线：优先请求 OSRM 真实道路几何，失败时降级为直线
+    var legDefs = [
+      [cityData[0], cityData[1]],  // 巴黎 → 布鲁塞尔 312km
+      [cityData[1], cityData[2]],  // 布鲁塞尔 → 阿姆斯特丹 212km
+      [cityData[2], cityData[3]],  // 阿姆斯特丹 → 科隆 261km
+      [cityData[3], cityData[4]],  // 科隆 → 卢森堡 203km
+      [cityData[4], cityData[5]]   // 卢森堡 → 巴黎（实际经凡尔赛，约 400km）
+    ];
+    var LEG_STYLE = {color:'#0071e3', weight:4, opacity:.9};
+    legDefs.forEach(function(leg){
+      var straight = L.polyline([[leg[0].lat,leg[0].lng],[leg[1].lat,leg[1].lng]], LEG_STYLE).addTo(map);
+      fetch('https://router.project-osrm.org/route/v1/driving/' +
+            leg[0].lng + ',' + leg[0].lat + ';' + leg[1].lng + ',' + leg[1].lat +
+            '?overview=full&geometries=geojson')
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+          if (data && data.routes && data.routes[0] && data.routes[0].geometry) {
+            L.geoJSON(data.routes[0].geometry, {style: LEG_STYLE}).addTo(map);
+            map.removeLayer(straight);
+          }
+        })
+        .catch(function(){ /* 网络失败：保留直线 */ });
+    });
+    // 各段距离标注（位置取各段线段中点）
+    [
+      {pos:[49.85,3.35], d:'312km'},
+      {pos:[51.61,4.63], d:'212km'},
+      {pos:[51.65,5.93], d:'261km'},
+      {pos:[50.27,6.55], d:'203km'},
+      {pos:[49.23,4.24], d:'约400km'}
+    ].forEach(function(leg){
+      L.marker(leg.pos, {
+        icon: L.divIcon({className:'leg-dist', html: leg.d, iconSize:[0,0]}),
+        interactive:false
+      }).addTo(map);
+    });
+    // 城市标记 + 永久名称标签（巴黎返程与巴黎同点，只标一次）
+    var labeled = {};
     cityData.forEach(function(c){
       var marker = L.circleMarker([c.lat, c.lng], {
-        radius: c.sub ? 6 : 9, color:'#fff', weight:2.5,
-        fillColor: c.sub ? '#ff9f0a' : '#0071e3', fillOpacity:1
+        radius: 9, color:'#fff', weight:2.5,
+        fillColor:'#0071e3', fillOpacity:1
       });
-      marker.bindTooltip(c.name, {direction:'top', offset:[0,-6]});
+      var labelName = c.name.replace('(返程)','');
+      if (!labeled[labelName]) {
+        marker.bindTooltip(labelName, {permanent:true, direction:'top', offset:[0,-8], className:'city-label'});
+        labeled[labelName] = true;
+      }
       marker.on('click', function(){ location.hash = '#day-' + c.day; });
       marker.addTo(map);
     });
-    map.fitBounds(L.latLngBounds(line.concat([[cityData[3].lat,cityData[3].lng]])), {padding:[40,40]});
+    map.fitBounds(L.latLngBounds(cityData.map(function(c){return [c.lat, c.lng];})), {padding:[40,40]});
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
@@ -1136,6 +1199,24 @@ footer{padding:72px 0 40px;background:linear-gradient(180deg,#f5f5f7,#e8e8ed)}
   }
   window.addEventListener('scroll', onScroll, {passive:true});
   onScroll();
+})();
+(function(){
+  // 苹果风数字滚动（hero 统计：7 / 5 / 1,502 / 22 / 6）
+  var stats = document.querySelectorAll('.hero-stats .stat b');
+  stats.forEach(function(el){
+    var target = parseFloat(el.textContent.replace(/,/g,''));
+    var comma = el.textContent.indexOf(',') > -1;
+    var dur = 1600, start = null;
+    function step(ts){
+      if (!start) start = ts;
+      var p = Math.min((ts - start) / dur, 1);
+      var eased = 1 - Math.pow(1 - p, 3);
+      var val = Math.round(target * eased);
+      el.textContent = comma ? val.toLocaleString('en-US') : String(val);
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  });
 })();
 </script>
 </body>
