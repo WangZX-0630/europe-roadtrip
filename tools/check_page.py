@@ -14,10 +14,11 @@ def must(label, cond):
     if not cond:
         errors.append(label)
 
-# 1. 板块结构
-for sid in ['hero', 'route', 'map', 'itinerary', 'culture', 'budget', 'bookings', 'tips']:
+# 1. 板块结构（#map 已于 2026-08-08 合并入 #route，改为断言地图容器）
+for sid in ['hero', 'route', 'itinerary', 'culture', 'budget', 'bookings', 'tips']:
     must(f'<section id="{sid}">', f'<section id="{sid}">' in html)
 must('<footer>', '<footer>' in html)
+must('id="map-canvas"', 'id="map-canvas"' in html)
 
 # 2. 导航锚点可解析
 for m in re.finditer(r'href="#([\w-]+)"', html):
@@ -35,7 +36,8 @@ meals = re.findall(r'<article class="meal( reveal)?"', html)
 must(f'美食卡数量 ({len(meals)} 张)', len(meals) >= 13)
 drives = re.findall(r'<tr class="drive">', html)
 must(f'9 段驾驶数据 (实际 {len(drives)})', len(drives) == 9)
-must('SVG 路线图存在', '<svg' in html)
+# SVG 概览图已于 2026-08-08 移除（功能并入 Leaflet 地图），改为断言地图距离标注
+must('地图距离标注存在', 'leg-dist' in html)
 must('Leaflet 引入', 'unpkg.com/leaflet' in html)
 
 # 4. 模板残留检查（JS 渲染或占位符泄漏）
