@@ -1,4 +1,19 @@
+# 个人敏感文件,严禁上传
+*.pdf
+*.eml
+*.xlsx
+*.docx
 _excel_dump.txt
+酒店入住凭证/
+tickets/
+提车凭证.pdf
+订车报销凭证.pdf
+取车材料&租车指南.pdf
+电子_机票_*.pdf
+申根签证行程单_英文.docx
+
+# 本地工具与依赖
+node_modules/
 __pycache__/
 *.pyc
-node_modules/
+tools/qa-screenshots/
